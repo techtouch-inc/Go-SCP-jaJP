@@ -1,0 +1,9 @@
+version: "3.7"
+services:
+  build:
+    build: .
+    image: go-scp:latest
+    entrypoint: bash -c "npm run build"
+    network_mode: host
+    volumes:
+      - .:/build
