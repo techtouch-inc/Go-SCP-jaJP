@@ -1,13 +1,3 @@
-Sanitization
-============
-
-Sanitization refers to the process of removing or replacing submitted data.
-When dealing with data, after the proper validation checks have been made,
-sanitization is an additional step that is usually taken to strengthen data
-safety.
-
-The most common uses of sanitization are as follows:
-
 サニタイズ
 ============
 
@@ -26,14 +16,9 @@ HTML テキストをエスケープするためのものと、HTML をアンエ�
 その他の文字は、手動でエンコードするか、サードパーティライブラリを使う必要があります。
 逆に、`UnescapeString()`という関数はエンティティを文字に変換します。
 
-## Strip all tags
+> 訳者注釈：html タグを含んだ文字列を入力として受け取って保存してしまい、巡り巡ってその文字列がブラウザで出力されるときに、意図しない html の要素や javascript がページに埋め込まれることになり得ます。
 
-Although the `html/template` package has a `stripTags()` function, it's
-unexported. Since no other native package has a function to strip all tags, the
-alternatives are to use a third-party library, or to copy the whole function
-along with its private classes and functions.
-
-## すべてのタグを取り除く
+# すべてのタグを取り除く
 
 `html/template` パッケージには `stripTags()` 関数がありますが、これは
 プライベート関数なためエクスポートできません。他のネイティブパッケージにはすべてのタグを除去する関数がないのでサードパーティのライブラリを使うか、`stripTags()` 関連するプライベートなクラスや関数を一緒にをコピーする必要があります。
@@ -43,13 +28,6 @@ along with its private classes and functions.
 * https://github.com/kennygrant/sanitize
 * https://github.com/maxwells/sanitize
 * https://github.com/microcosm-cc/bluemonday
-
-## Remove line breaks, tabs and extra white space
-
-The `text/template` and the `html/template` include a way to remove whitespaces
-from the template, by using a minus sign `-` inside the action's delimiter.
-
-Executing the template with source
 
 ## 改行、タブ、余分な空白を削除する
 
@@ -66,10 +44,6 @@ Executing the template with source
 23<45
 ```
 
-**NOTE**: If the minus `-` sign is not placed immediately after the opening
-action delimiter ``{{`` or before the closing action delimiter ``}}``, the
-minus sign `-` will be applied to the value
-
 **NOTE**: マイナス記号 `-` がオープニングデリミタ`{{`の直後、またはクロージングデリミタ `}}` の直後に置かれていない場合は通常のマイナス記号 `-` として扱われます。
 
 ```
@@ -81,6 +55,9 @@ minus sign `-` will be applied to the value
 ```
 -3
 ```
+
+
+> 訳者注釈：バリデーションでも補足しましたが、空白文字や改行文字は文脈によって区切り文字などの特殊な扱いを受けてしまうことが対処の理由です。
 
 ## URLリクエストパス
 
