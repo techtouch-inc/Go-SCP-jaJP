@@ -28,7 +28,8 @@ SELECT number, expireDate, cvv FROM creditcards WHERE customerId = 1 OR 1=1
 
 すると、すべてのテーブルレコードがダンプされます（`1=1`はどのレコードに対しても真になります）。
 
-データベースを安全に保つ方法は[プリペアドステートメント][1]だけです。
+データベースを安全に保つ方法はたった一つ、[プリペアドステートメント][1]です。
+
 
 ```go
 ctx := context.Background()

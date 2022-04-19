@@ -13,12 +13,16 @@
 <input type="password" name="passwd" autocomplete="off" />
 ```
 
+> 訳者注：　autocomplete 機能を off にしてもブラウザ固有のIDパスワード管理機能がオフになることはありません。ただし例えば google chrome のIDパスワード保存機能であれば、アカウントに紐づけられるものなので、共用PCで入力履歴が残るというリスクが避けられたりと違いがあります。
+
 認証情報は、送信される際には HTTPS のような暗号化された接続を介する必要があります。
 認証情報のリセットなどに使われる電子メールによる一時的なパスワードの送信は、その例外の一つでしょう。
+> 訳者注：メールは送信側だけでは経路の安全性をコントロールできません。受信者までの経路の途中で平文で通信されている可能性があります。
 
 リクエストされたURLは通常、HTTPサーバーによってクエリ文字列を含んだアクセスログに記録されることを覚えておいてください。
 認証情報をHTTPサーバーのアクセスログに漏らさないために、サーバーへのデータ送信には
 HTTPの `POST` メソッドを使用しましょう。
+>  訳者注：　https://www.ietf.org/rfc/rfc2616.txt の 15.1.3 にも書かれている。
 
 ```text
 xxx.xxx.xxx.xxx - - [27/Feb/2017:01:55:09 +0000] "GET /?username=user&password=70pS3cure/oassw0rd HTTP/1.1" 200 235 "-" "Mozilla/5.0 (X11; Fedora; Linux x86_64; rv:51.0) Gecko/20100101 Firefox/51.0"
@@ -56,14 +60,6 @@ xxx.xxx.xxx.xxx - - [27/Feb/2017:01:55:09 +0000] "GET /?username=user&password=7
 </form>
 ```
 
-* Who is registered: "Invalid password" means that the username exists.
-* How your system works: "Invalid password" may reveal how your application
-  works, first querying the database for the `username` and then comparing
-  passwords in-memory.
-
-An example of how to perform authentication data validation (and storage) is
-available at [Validation and Storage section][5].
-
 曖昧なメッセージを使用することで、以下の情報が開示されません。
 
 * 誰が登録しているか： "Invalid password" というメッセージから、ユーザー名が既に存在することを意味します。
@@ -76,7 +72,7 @@ available at [Validation and Storage section][5].
 
 また、タイミングアタックを防ぐためにパスワードのチェックの際には実行時間が不変の比較関数を使用することをお勧めします。 タイミングアタックとは、異なる入力による複数のリクエストに対する処理の時間差を解析する手法です。
 
-`record == password` を標準的な方法で比較した場合、一致しない最初の文字で、false を返すでしょう。この場合、 送信されたパスワードが正解に近いほど応答時間が長くなります。
+`record == password` という文字列を標準的な方法で比較した場合、一致しない最初の文字で、false を返すでしょう。この場合、 送信されたパスワードが正解に近いほど応答時間が長くなります。
 
 これを利用すれば、攻撃者はパスワードを推測することができます。
 もしもレコードが存在しない場合でも、空文字列とユーザーの入力を`subtle.ConstantTimeCompare`を使って比較することに気をつけましょう。
