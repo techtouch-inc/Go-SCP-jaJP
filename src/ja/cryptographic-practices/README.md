@@ -1,4 +1,4 @@
-実践的な暗号
+暗号に関するプラクティス
 ======================
 
 まずは強く明言します。
@@ -14,9 +14,9 @@ hash := F(data)
 ```
 
 ハッシュ値は固定長で、入力値の小さな変動に対して大きく変化します。
-（それでも衝突は起こるかもしれませんが）。優れたハッシュアルゴリズムでは、ハッシュ値を元の値に戻すことはできません[^1]。ハッシュアルゴリズムとしては、MD5が最も有名ですが、セキュリティ的には[BLAKE2][4]が最も強く、柔軟性があると考えられています。
+（それでも衝突は起こるかもしれませんが）。優れたハッシュアルゴリズムでは、ハッシュ値を元の値に戻すことはできません[^1]。ハッシュアルゴリズムとしては、MD5 が最も有名ですが、セキュリティ的には [BLAKE2][4] が最も強く、柔軟性があると考えられています。
 
-Goの補助的な暗号ライブラリには、[BLAKE2b][5]（単にBLAKE2のこと）と[BLAKE2s][6]の実装があます。前者は64ビット環境用に最適化されており、後者は8ビットから32ビットまでの環境に対応しています。BLAKE2が使えない場合が利用できない場合は、SHA-256が良い選択肢となります。
+Go の補助的な暗号ライブラリには、[BLAKE2b][5]（単に BLAKE2 のこと）と[BLAKE2s][6] の実装があます。前者は64ビット環境用に最適化されており、後者は8ビットから32ビットまでの環境に対応しています。BLAKE2 が使えない場合が利用できない場合は、SHA-256 が良い選択肢となります。
 
 暗号ハッシュアルゴリズムにおいて、遅いことは望ましいということに注意してください。
 コンピュータは年々高速化しているため、同時に攻撃者はより多くのパスワードを試すことができるようになっています。（[クレデンシャルスタッフィング][7]および[ブルートフォースアタック][8]）。それに対抗してハッシュ関数は、少なくとも10,000回の反復的な処理を内包する、本質的に遅い関数であるべきです。
@@ -69,37 +69,31 @@ data := F⁻¹(encrypted_data, key)
 ```
 
 機密性の高いデータを、通信・保存後に自分を含む誰かがアクセス・処理するような場合には、暗号化する必要があります。
-わかりやすい暗号化の使用例としては、HTTPSが挙げられます。
-共通鍵暗号化においてはAESがデファクトスタンダードです。この
+わかりやすい暗号化の使用例としては、HTTPS が挙げられます。
+共通鍵暗号化においては AES がデファクトスタンダードです。この
 アルゴリズムは、他の多くの対称型暗号と同様に、さまざまな方式で実装することができます。
-下のコードサンプルでは、より一般的なCBC/ECB（暗号のコードサンプルにおいては正しいはず。）ではなくGCM（ガロアカウンターモード）が使用されていることにお気づきでしょう。
+下のコードサンプルでは、より一般的な CBC/ECB（暗号のコードサンプルにおいては正しいはず。）ではなく GCM（ガロアカウンターモード）が使用されていることにお気づきでしょう。
 GCM は **認証付き**暗号化であり、暗号化の後に認証タグが暗号文に付与されます。そしてその認証タグを使って復号化の**前に**改ざんされていなことを確認することができます。それが GCM と CBC/ECB の一番の違いです。
 
 これに対して、公開鍵と秘密鍵のペアを使用する公開鍵暗号方式または非対称暗号方式と呼ばれる暗号化方式があります。
 非対称暗号方式はほとんどの場合において、対称鍵暗号方式よりも性能が劣ります。
 そのため、ほとんどの一般的なユースケースでは、2人の間で共通鍵を非対称暗号を使用して共有しています。その対称鍵を使って対称暗号で暗号化されたメッセージのやり取りを行うのです。
 
-1990年代の技術であるAESは置いておいて、Goの作者はchacha20poly1305のような認証付きの現代的な対象暗号アルゴリズムの実装とサポートを開始しています。
+1990年代の技術である AES は置いておいて、Go の作者は chacha20poly1305 のような認証付きの現代的な対象暗号アルゴリズムの実装とサポートを開始しています。
 
-Another interesting package in Go is x/crypto/nacl. This is a reference to
-Dr. Daniel J. Bernstein's NaCl library, which is a very popular modern
-cryptography library.
-The nacl/box and nacl/secretbox in Go are implementations of NaCl's
-abstractions for sending encrypted messages for the two most common use-cases:
+Go のもう一つの面白いパッケージは、x/crypto/nacl です。
+これは Daniel J. Bernstein 博士の NaCl ライブラリを参照したもので、非常に人気のある最新の暗号ライブラリです。
+Go の nacl/box と nacl/secretbox は、最も一般的な2つのユースケースに対応した暗号化メッセージ送信のための NaCl の実装を抽象化したものです。
 
-* Sending authenticated, encrypted messages between two parties using public
-  key cryptography (nacl/box)
-* Sending authenticated, encrypted messages between two parties using symmetric
-  (a.k.a secret-key) cryptography
+* 公開鍵暗号方式を用いた２者間での認証済み暗号化メッセージの送信（nacl/box）。
+* 対称(秘密鍵)暗号を用いた２者間での認証済み暗号化メッセージの送信。
 
-It is very advisable to use one of these abstractions instead of direct use of
-AES, if they fit your use-case.
+用途に適う場合、AESを直接使用するのではなく、これらの抽象化のいずれかを使用することを強く推奨します。
 
-The example below illustrates encryption and decryption using an [AES-256][9]
-(*256 bits/32 bytes*) based key, with a clear separation of concerns such as
-encryption, decryption and secret generation. The `secret` method is a
-convenient option which helps generate a secret. The source code sample was
-taken from [here][10] but has been slightly modified.
+以下の例は、[AES-256][9](*256 bits/32 bytes*) をベースにした鍵による暗号化・復号化を示しています。
+暗号化、復号化、秘密鍵の生成に対する考慮が明確に分離されています。
+秘密鍵の生成の際には `secret` メソッドが便利な選択となるでしょう。
+ソースコードのサンプルは [こちら][10]から引用したものですが、若干の修正を加えています。
 
 ```go
 package main
@@ -194,22 +188,19 @@ Encrypted: b46fcd10657f3c269844da5f824511a0e3da987211bc23e82a9c050a2be287f51bb41
 Decrypted: Welcome to Go Language Secure Coding Practices
 ```
 
-Please note, you should "_establish and utilize a policy and process for how
-cryptographic keys will be managed_", protecting "_master secrets from
-unauthorized access_". That being said, your cryptographic keys shouldn't be
-hardcoded in the source code (as it is in this example).
+暗号鍵の管理方法に関するポリシーとプロセスを確立し、不正アクセスからマスターキーを守る必要があることに注意してください。
+つまり、暗号鍵はソースコードにハードコードされるべきではないのです。（この例ではそうなっていますが。）
 
-[Go's crypto package][1] collects common cryptographic constants, but
-implementations have their own packages, like the [crypto/md5][2] one.
+[Go's crypto package][1] には、一般的な暗号用の定数が集められていますが、実装は [crypto/md5][2] のような独自のパッケージ内に分かれています。
 
-Most modern cryptographic algorithms have been implemented under
-https://godoc.org/golang.org/x/crypto, so developers should focus on those
-instead of the implementations in the [`crypto/*` package][1].
+最近の暗号アルゴリズムのほとんどは
+https://godoc.org/golang.org/x/crypto で実装されているので、開発者は [`crypto/*` package][1] ではなく、前者のパッケージに注目すべきです。
 
 ---
 
-[^1]: Rainbow table attacks are not a weakness on the hashing algorithms.
-[^2]: Consider reading the [Authentication and Password Management][3] section about "_strong one-way salted hashes_" for credentials.
+[^1]: レインボーテーブル攻撃は、ハッシュアルゴリズム自体の弱点ではありません。
+[^2]: [認証とパスワード管理][3]のセクションを読んで、認証情報のための強いソルト付き一方向性ハッシュを考慮してください。
+
 
 [1]: https://golang.org/pkg/crypto/
 [2]: https://golang.org/pkg/crypto/md5/

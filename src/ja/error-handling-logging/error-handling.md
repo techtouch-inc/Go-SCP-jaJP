@@ -1,12 +1,11 @@
-Error Handling
+エラー処理
 ==============
 
-In Go, there is a built-in `error` type. The different values of `error` type
-indicate an abnormal state. Usually in Go, if the `error` value is not `nil`
-then an error has occurred. It must be dealt with in order to allow the
-application to recover from that state without crashing.
+Go では、組み込みの `error` 型があります。エラー型の値の違いは状態の異常を表します。
+通常、Go では `error` の値が `nil` でない場合、エラーが発生したことを表します。
+アプリケーションをクラッシュさせることなく、その状態から回復させるために対処する必要があります。
 
-A simple example taken from the Go blog follows:
+Go ブログから引用した簡単な例を以下に示します。
 
 ```go
 if err != nil {
@@ -14,9 +13,10 @@ if err != nil {
 }
 ```
 
-Not only can the built-in errors be used, we can also specify our own error
-types. This can be achieved by using the `errors.New` function.
-Example:
+組み込みのエラーだけでなく、独自のエラー型を指定することもできます。
+これは、 `errors.New` 関数を使用することで実現できます。
+例：
+
 
 ```go
 {...}
@@ -30,9 +30,7 @@ if err != nil {
 {...}
 ```
 
-If we need to format the string containing the invalid argument to see what
-caused the error, the `Errorf` function in the `fmt` package allows us to do
-this.
+無効な引数を含む文字列を整形してエラーの原因を調べる必要がある場合は、 `fmt` パッケージの `Errorf` 関数を使用します。
 
 ```go
 {...}
@@ -42,18 +40,16 @@ if f < 0 {
 {...}
 ```
 
-When dealing with error logs, developers should ensure no sensitive information
-is disclosed in the error responses, as well as guarantee that no error handlers
-leak information (e.g. debugging, or stack trace information).
+エラーログを扱う場合、開発者はエラーレスポンスに機密情報が含まれないようにする必要があります。
+同様に、エラーハンドラから情報（デバッグやスタックトレース情報など）が漏れないようにする必要があります。
 
-In Go, there are additional error handling functions, these functions are
-`panic`, `recover` and `defer`. When an application state is `panic` its
-normal execution is interrupted, any `defer` statements are executed, and
-then the function returns to its caller. `recover` is usually used inside
-`defer` statements and allows the application to regain control over a
-_panicking_ routine, and return to normal execution.
-The following snippet, based on the Go documentation explains the execution
-flow:
+
+Go には、`panic`、`recover` および `defer` という補助的なエラー処理関数があります。
+
+アプリケーションの状態が `panic` になった場合、通常の処理は中断され、 `defer` 文が実行されて関数は呼び出し元に戻ります。
+`recovwe`は通常、 `defer` 文の内部で使用されます。
+パニックに陥ったルーチンの制御を回復させ、通常の処理に戻します。
+次のスニペットは、Go のドキュメントに基づいて、実行の流れを説明したものです。
 
 ```go
 func main () {
@@ -94,34 +90,30 @@ Recovered in start()
 Returned normally from start().
 ```
 
-By examining the output, we can see how Go can handle `panic` situations and
-recover from them, allowing the application to resume its normal state. These
-functions allow for a graceful recovery from an otherwise unrecoverable
-failure.
+出力を調べると、Go がどのように `panic` 状態を処理し、アプリケーションを正常な状態に戻すことができるかがわかります。
+これらの関数により、回復不可能だった障害から上手に回復することができます。
 
-It is worth noting that `defer` usages also include _Mutex Unlocking_, or
-loading content after the surrounding function has executed (e.g. footer).
+また、 `defer` の使用法には、_Mutex Unlocking_ 、つまり他の関数が実行された後にコンテンツを読み込むこと (例: footer) も含まれることに注意してください。
 
-In the `log` package there is also a `log.Fatal`. Fatal level is effectively
-logging the message, then calling `os.Exit(1)`.
-Which means:
+`log` パッケージには、 `log.Fatal` というものもあります。
+致命的なレベルとは、メッセージをログに記録し、その後すぐに `os.Exit(1)` を呼び出すべき状況です。
 
-* Defer statements will not be executed.
-* Buffers will not be flushed.
-* Temporary files and directories are not removed.
+つまり
 
-Considering all the previously mentioned points, we can see how `log.Fatal`
-differs from `Panic` and why it should be used carefully.
-Some examples of the possible usage of `log.Fatal` are:
+* Deferステートメントを実行しない
+* バッファをフラッシュしない
+* 一時的なファイルやディレクトリを削除しない
 
-* Set up logging and check whether we have a healthy environment and parameters.
-  If we don't, then there's no need to execute our main().
-* An error that should never occur and that we know that it's unrecoverable.
-* If a non-interactive process encounters an error and cannot complete, there
-  is no way to notify the user about this error. It's best to stop the
-  execution before additional problems can emerge from this failure.
+ということです。
 
-To demonstrate, here's an example of an initialization failure:
+これまでに述べたすべてを考慮すると、`log.Fatal`が `Panic` とどう違うのか、`log.Fatal`をなぜ注意深く使わなければならないのかがわかるでしょう。
+`log.Fatal`の使用例としては、以下のようなものがあります。
+
+* ロギングをセットアップし、健全な環境とパラメータが設定されているかチェックする際に、失敗した場合。その際は main() を実行する必要はありません。
+* 決して発生してはならないエラーで、回復不可能であることが分かっているもの場合。
+* 非対話型プロセスがエラーに遭遇し、完了できない場合、そのことをユーザに通知する方法がない場合。このような場合、さらなる問題が発生する前に、実行を停止するのが最善です。
+
+以下に、初期化に失敗した場合の例を示します。
 
 ```go
 func initialize(i int) {
@@ -145,5 +137,4 @@ func main() {
 }
 ```
 
-It's important to assure that in case of an error associated with the security
-controls, its access is denied by default.
+危険な制御周りにエラーが発生した場合、そのアクセスはデフォルトで拒否されることを保証することが重要です。

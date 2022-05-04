@@ -1,17 +1,15 @@
-Error Handling and Logging
+エラーハンドリングとロギング
 ==========================
 
-Error handling and logging are essential parts of application and infrastructure
-protection. When Error Handling is mentioned, it is referring to the capture of
-any errors in our application logic that may cause the system to crash, unless
-handled correctly. On the other hand, logging highlights all the operations and
-requests that occurred on our system. Logging not only allows the identification
-of all operations that have occurred, but it also helps determine what actions
-need to be taken to protect the system. Since attackers often attempt to
-remove all traces of their action by deleting logs, it's critical that logs are
-centralized.
+エラーハンドリングとロギングは、アプリケーションとインフラストラクチャの保護に不可欠な要素です。
+エラーハンドリングとは、正しく処理しないとシステムをクラッシュさせる可能性のあるアプリケーションロジックのエラーを捕捉することを指します。
 
-The scope of this section covers the following:
+一方、ロギングはシステムで発生したすべての操作とリクエストを明らかにするものです。
+ログを取ることで、発生したすべての操作の識別が可能になるだけでなく
+システムを保護するためにどのような対処が必要かを判断することもできます。
+を決定するのに役立ちます。攻撃者はしばしば全てのログを削除することで痕跡を消そうとすることが多いため、ログを一元管理することが重要です。
 
-* Error Handling
-* Logging
+このセクションのスコープは、以下の通りです。
+
+* エラーハンドリング
+* ロギング

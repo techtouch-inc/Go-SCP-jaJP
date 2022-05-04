@@ -15,7 +15,7 @@ Summary
     * [その他のガイドライン](authentication-password-management/other-guidelines.md)
 * [セッション管理](session-management/README.md)
 * [アクセスコントロール](access-control/README.md)
-* [Cryptographic Practices](cryptographic-practices/README.md)
+* [暗号に関するプラクティス](cryptographic-practices/README.md)
     * [Pseudo-Random Generators](cryptographic-practices/pseudo-random-generators.md)
 * [Error Handling and Logging](error-handling-logging/README.md)
     * [Error Handling](error-handling-logging/error-handling.md)

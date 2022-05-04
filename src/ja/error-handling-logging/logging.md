@@ -1,29 +1,25 @@
-Logging
+ロギング
 =======
 
-Logging should always be handled by the application and should not rely on a
-server configuration.
+ログは常にアプリケーションによって処理されるべきで、サーバー構成に依存するべきではありません。
 
-All logging should be implemented by a master routine on a trusted system, and
-the developers should also ensure no sensitive data is included in the logs
-(e.g. passwords, session information, system details, etc.), nor is there
-any debugging or stack trace information.
-Additionally, logging should cover both successful and unsuccessful security
-events, with an emphasis on important log event data.
+すべてのログは、信頼できるシステム上のマスタールーチンによって実現されるべきです。
+開発者は、機密データがログに含まれないようにする必要があります。(パスワード、セッション情報、システムの詳細など）同様に、デバッグやスタックトレースの情報も含まれてはいけません。
 
-Important event data most commonly refers to all:
+また重要なイベントデータの記録に重点を置いて、成功したセキュリティイベントと失敗したセキュリティイベントの両方をカバーする必要があります。
 
-* Input validation failures.
-* Authentication attempts, especially failures.
-* Access control failures.
-* Apparent tampering events, including unexpected changes to state data.
-* Attempts to connect with invalid or expired session tokens.
-* System exceptions.
-* Administrative functions, including changes to security configuration
-  settings.
-* Backend TLS connection failures and cryptographic module failures.
+重要なイベントデータとは、一般的に以下のものを指します。
 
-Here's a simple log example which illustrates this:
+* 入力バリデーションの失敗
+* 認証の試行、特にその失敗
+* アクセス制御の失敗
+* 状態データへの予期せぬ変更といった、明らかな改ざんの試行
+* 無効または期限切れのセッション・トークンでの接続試行
+* システム例外
+* セキュリティ構成の設定の変更を含む管理機能の実行
+* バックエンドのTLS接続の失敗と暗号化モジュールの失敗
+
+これを説明する簡単なログの例を示します。
 
 ```go
 func main() {
@@ -52,45 +48,35 @@ func main() {
 }
 ```
 
-It's also good practice to implement generic error messages, or custom error
-pages, as a way to make sure that no information is leaked when an error
-occurs.
+一般的なエラーメッセージや、カスタムエラーページを実装することで、エラー発生時に情報が漏れないようにするのも良い方法です。
 
 ---
 
-[Go's log package][0], as per the documentation, "implements **simple**
-logging". Some common and important features are missing, such as leveled
-logging (e.g. `debug`, `info`, `warn`, `error`, `fatal`, `panic`) and formatters
-support (e.g. logstash). These are two important features to make logs usable
-(e.g. for integration with a Security Information and Event Management system).
+[Go's log package][0]は、ドキュメントによると**シンプル**なロギングを実装しているとのことです。レベルごとのロギング (例: `debug`、`info`、`warn`、`error`、`fatal`、`panic`) や、フォーマッタのサポート (例: logstash) といった一般的で重要な機能が欠けています。
+こうした機能にはログを利用しやすくするための重要な要素が２つあります。
+(例: Security Information や Event Management systemとの統合)。
 
-Most, if not all third-party logging packages offer these and other features.
-The ones below are some of the most popular third-party logging packages:
+すべてではないにせよ、ほとんどのサードパーティのロギングパッケージは、これらの機能およびその他の機能を提供しています。
+以下に挙げるのは、最も人気のあるサードパーティのロギングパッケージです。
 
 * [Logrus][1] - https://github.com/Sirupsen/logrus
-* [glog][2]   - https://github.com/golang/glog
-* [loggo][3]  - https://github.com/juju/loggo
+* [glog][2] - https://github.com/golang/glog
+* [loggo][3] - https://github.com/juju/loggo
 
-Here's an important note regarding [Go's log package][0]: Fatal and Panic
-functions have different behaviors after logging: Panic functions call `panic`
-but Fatal functions call `os.Exit(1)` that **may terminate the program
-preventing deferred statements to run, buffers to be flushed, and/or temporary
-data to be removed**.
+ここで、[Go's log package][0]に関する重要な注意事項があります。Fatal と Panic
+関数はロギング後に異なる動作をします。Panic 関数は `panic` を呼び出しますが、Fatal 関数は `os.Exit(1)` を呼び出さす。後者は defer ステートメントを無視してプログラムを終了させるので、バッファのフラッシュ、および一時データの削除ができないかもしれません。
+
 
 ---
 
-From the perspective of log access, only authorized individuals should have
-access to the logs.
-Developers should also make sure that a mechanism that allows for log
-analysis is set in place, as well as guarantee that no untrusted data will
-be executed as code in the intended log viewing software or interface.
+ログアクセスの観点としては、許可された個人のみがログにアクセスできるべきです。
+また、ログを解析できるような仕組みを用意し、信頼できないデータがログ閲覧ソフトやインターフェイスプログラムに実行されないことを保証する必要があります。
 
-Regarding allocated memory cleanup, Go has a built-in Garbage Collector for this
-very purpose.
 
-As a final step to guarantee log validity and integrity, a cryptographic
-hash function should be used as an additional step to ensure no log
-tampering has taken place.
+割り当てられたメモリのクリーンアップについては、Goには専用のガベージコレクタが組み込まれています。
+
+ログの有効性と完全性を保証する最終段階として、暗号ハッシュ関数を使用して、ログが改ざんされていないことを確認するとより良いでしょう。
+
 
 ```go
 {...}
@@ -116,10 +102,9 @@ if err != nil {
 {...}
 ```
 
-Note: The `ComputeSHA256()` function calculates a file's SHA256. It's also
-important to note that the log-file hashes must be stored in a safe place, and
-compared with the current log hash to verify integrity before any updates to the
-log. [Working demo available in the repository][4].
+
+注意: `ComputeSHA256()` はファイルのSHA256を計算する関数です。ログファイルのハッシュは安全な場所に保存され、ログを更新する前に完全性を検証するために現在のログハッシュと比較されなければならないことに注意してください。
+[リポジトリにワーキングデモがあります][4]。
 
 [0]: https://golang.org/pkg/log/
 [1]: https://github.com/Sirupsen/logrus
