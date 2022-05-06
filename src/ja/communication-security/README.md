@@ -1,15 +1,13 @@
-Communication Security
+通信のセキュリティ
 ======================
 
-When approaching communication security, developers should be certain that the
-channels used for communication are secure.
-Types of communication include server-client, server-database, as well as all
-backend communications. These must be encrypted to guarantee data integrity, and
-to protect against common attacks related to communication security.
-Failure to secure these channels allows known attacks like MITM, which allows
-attacker to intercept and read the traffic in these channels.
+通信のセキュリティに取り組む場合、開発者は通信に使用するチャネルが安全であることを確認する必要があります。
+通信の種類には、サーバー・クライアント、サーバー・データベース、およびすべてのバックエンド間通信が含まれます。
+これらの通信は、データの完全性を保証するために、また通信に関連する一般的な攻撃から保護するためにも暗号化する必要があります。
 
-The scope of this section covers the following communication channels:
+これらのチャネルを保護しないと、MITMのような既知の攻撃が可能になり、攻撃者はトラフィックを盗聴し妨害することができます。
+
+このセクションの範囲は、以下の通信チャネルを対象としています。
 
 * HTTP/HTTPS
 * Websockets

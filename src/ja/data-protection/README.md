@@ -1,32 +1,26 @@
-Data Protection
+データの保護
 ===============
 
-Nowadays, one of the most important things in security in general is data
-protection. You don't want something like:
+現在、データの保護はセキュリティ全般で最も重要なことの1つです。
+以下みたいになったら困りますよね。
 
 ![All your data are belong to us](files/cB52MA.jpeg)
 
-Simply put, data from your web application needs to be protected. Therefore in
-this section, we will take a look at the different ways to secure it.
+簡単に言えば、Webアプリケーションのデータは保護される必要があるのです。そのため、このセクションではデータを保護するさまざまな方法について見ていきます。
 
-One of the first things you should tend to is creating and implementing the
-right privileges for each user, and restrict them to only the functions they
-really need.
+最初に取り組むべきことの1つは、ユーザーそれぞれに対して適切な権限を実装し、本当に必要な機能だけにアクセスを制限することです。
 
-For example, consider a simple online store with the following user roles:
+例えば、次のようなユーザー・ロールを持つ単純なオンライン・ストアを考えてみましょう。
 
-* _Sales user_: Allowed to only view a catalog
-* _Marketing user_: Allowed to check statistics
-* _Developer_: Allowed to modify pages and web application options
+* セールスユーザー: カタログの閲覧のみ許可
+* マーケティングユーザー: 統計情報の確認が可能
+* 開発者: ページとウェブアプリケーションの設定変更を許可する
 
-Also, in the system configuration (aka webserver), you should define the right
-permissions.
+また、システム（ウェブサーバー）構成において、正しいパーミッションを定義するべきです。
 
-The primary thing to perform is to define the right role for each user - web or
-system.
+最初にやるべきことは各ユーザーに適切なロールを定義することです。
 
-Role separation and access controls are further discussed in
-the [Access Control][5] section.
+役割の分離とアクセス制御については、さらに、[アクセス制御][5]で説明します。
 
 ## Remove sensitive information
 
@@ -34,81 +28,70 @@ Temporary and cache files which contain sensitive information should be removed
 as soon as they're not needed. If you still need some of them, move them to
 protected areas or encrypt them.
 
-### Comments
+## 機密情報の削除
 
-Sometimes developers leave comments like _To-do lists_ in the source-code, and
-sometimes, in the worst case scenario, developers may leave credentials.
+機密情報を含む一時ファイルやキャッシュファイルは、不要になり次第すぐに削除しましょう。
+まだ必要な場合は、保護された場所に移動するか、暗号化しましょう。
+
+### コメント
+
+開発者がソースコードに Todo リストのようなコメントを残すことがあります。
+最悪の場合、開発者がクレデンシャルを残すこともあります。
 
 ```go
 // Secret API endpoint - /api/mytoken?callback=myToken
 fmt.Println("Just a random code")
 ```
 
-In the above example, the developer has an endpoint in a comment which, if not
-well protected, could be used by a malicious user.
+上記の例では、開発者がコメント内にエンドポイントの情報を残しています。このエンドポイントが守られていない場合、悪意あるユーアーに利用されてしまうかもしれません。
 
 ### URL
 
-Passing sensitive information using the HTTP GET method leaves the web
-application vulnerable because:
+HTTP GET メソッドで機密情報を渡すことは、次のような理由でウェブアプリケーションの脆弱性を残すことになります。
 
-1. Data could be intercepted if not using HTTPS by MITM attacks.
-2. Browser history stores the user's information. If the URL has
-   session IDs, pins or tokens that don't expire (or have low entropy),
-   they can be stolen.
-3. Search engines store URLs as they are found in pages
-4. HTTP servers (e.g. Apache, Nginx), usually write the requested URL, including
-   the query string, to unencrypted log files (e.g. `access_log`)
+1. HTTPS を使用していない場合、MITM 攻撃によりデータを傍受される可能性があります。
+2. ブラウザの履歴には、ユーザーの情報が保存されています。URLに
+   セッションID、ピン、トークンなど、有効期限のない（あるいはエントロピーの低い）ものが含まれていると、それらを盗まれる可能性があります。
+3. 検索エンジンは、ページ内で発見されたURLを保存する
+4. HTTPサーバー（例：Apache、Nginx）は、通常、要求されたURLを、クエリ文字列を含めて、暗号化されていない状態でログファイル (例: `access_log`) に書き込みます。
 
 ```go
 req, _ := http.NewRequest("GET", "http://mycompany.com/api/mytoken?api_key=000s3cr3t000", nil)
 ```
 
-If your web application tries to get information from a third-party website
-using your `api_key`, it could be stolen if anyone is listening within your
-network or if you're using a Proxy. This is due to the lack of HTTPS.
+ウェブアプリケーションが `api_key` を使って、第三者のウェブサイトから情報を取得しようとした場合に、もしも同一のネットワーク内で誰かが盗聴していたら、もしくはプロキシを使っていたとしたら、その情報は盗まれるかもしれません。これは HTTPS を使っていないためです。
 
-Also note that parameters being passed through GET (aka query string) will be
-stored in clear, in the browser history and the server's access log regardless
-whether you're using HTTP or HTTPS.
+GET で渡されたパラメータ(クエリストリング)は、HTTP と HTTPS のどちらを使用しているかに関係なく、ブラウザの履歴やサーバーのアクセスログに綺麗に残ることに注意してください。
 
-HTTPS is the way to go to prevent external parties other than the client and the
-server, to capture exchanged data. Whenever possible sensitive data such as the
-`api_key` in the example, should go in the request body or some header. The same
-way, whenever possible use one-time only session IDs or tokens.
+HTTPS は、クライアントとサーバー以外の第三者が、やり取りしたデータを取得できないようにするための方法です。
+`api_key` のような機密データは、可能な限りリクエストボディか何らかのヘッダに格納する必要があります。同様に、可能な限り一回限りのセッション ID やトークンを使用します。
 
-### Information is power
+### 情報は力なり
 
-You should always remove application and system documentation on the production
-environment. Some documents could disclose versions, or even functions that
-could be used to attack your web application (e.g. Readme, Changelog, etc.).
+本番環境上のアプリケーションやシステムのドキュメントは常に削除しましょう。
+ドキュメントによっては、ウェブアプリケーションを攻撃するために使われる可能性のあるバージョンや機能を明かしてしまうかもしれません。
+(例: Readme, Changelog, etc.)
 
-As a developer, you should allow the user to remove sensitive information that
-is no longer used. For example, if the user has expired credit cards on his
-account and wants to remove them, your web application should allow it.
+開発者であるあなたは、ユーザーが使わなくなった機密情報を削除できるようにすべきです。
+を削除できるようにする必要があります。例えば、ユーザーが自分のアカウントに期限切れのクレジットカードを持っていて、それを削除したい場合、ウェブアプリケーションはそれを許可すべきです。
 
-All of the information that is no longer needed must be deleted from the
-application.
+不要になった情報は、すべてアプリケーションから削除しなければなりません。
 
-#### Encryption is the key
+#### 暗号化がカギ
 
-Every piece of highly-sensitive information should be encrypted in your web
-application. Use the military-grade [encryption available in Go][2]. For more
-information, see the [Cryptographic Practices][3] section.
+機密性の高い情報は全てウェブアプリケーション内で暗号化する必要があります。
+軍用レベルの [Go で利用可能な暗号化][2] を使用してください。詳細については
+[暗号に関するプラクティス][3]のセクションを参照してください。
 
-If you need to implement your code elsewhere, just build and share the
-binary, since there's no bulletproof solution to prevent reverse engineering.
+あなたのコードを他の場所に実装する必要がある場合は、バイナリをビルドして共有してください。
+リバースエンジニアリングを防ぐ術はありません。
 
-Getting different permissions for accessing the code and limiting the access
-for your source-code, is the best approach.
+コードにアクセスするための異なるパーミッションを用意し、ソースコードへのアクセスを制限することは最良の方法です。
 
-Do not store passwords, connection strings (see example for how to secure
-database connection strings on [Database Security][4] section), or other
-sensitive information in clear text or in any non-cryptographically secure
-manner, both on the client and server sides.
-This includes embedding in insecure formats (e.g. Adobe flash or compiled code).
+パスワードやコネクションストリング、平文やセキュリティ的に不十分な形式の機密情報をクライアント側とサーバー側の両方で保存しないでください。（データベースコネクションストリングを保護する方法については、[データベースセキュリティ][4]の例を参照してください）。
+安全でない形式（例えば、Adobe Flashやコンパイルされたコード）での埋め込みも含みます。
 
-Here's a small example of encryption in Go using an external package
+以下は、外部パッケージを使ってGoで暗号化するシンプルな例です。
 `golang.org/x/crypto/nacl/secretbox`:
 
 ```go
@@ -149,35 +132,33 @@ if !ok {
 fmt.Println(string(decrypted))
 ```
 
-The output will be:
+出力は以下です。
 
 ```
 hello world
 ```
 
-## Disable what you don't need
+## 不要なものは無効にする
 
-Another simple and efficient way to mitigate attack vectors is to guarantee that
-any unnecessary applications or services are disabled in your systems.
+攻撃ベクトルを減らすためのもう一つの簡単で効率的な方法は、システム上で不要なアプリケーションやサービスを無効にすることです。
 
-### Autocomplete
+### オートコンプリート
 
-According to [Mozilla documentation][1], you can disable autocompletion in the
-entire form by using:
+[Mozilla のドキュメント][1]によると、次のようにしてフォーム全体のオートコンプリートを無効にすることができます。
+
 
 ```html
 <form method="post" action="/form" autocomplete="off">
 ```
 
-Or a specific form element:
+特定のフォーム要素に対しては以下のようにします。
 
 ```html
 <input type="text" id="cc" name="cc" autocomplete="off">
 ```
 
-This is especially useful for disabling autocomplete on login forms. Imagine a
-case where a XSS vector is present in the login page.
-If the malicious user creates a payload like:
+特に、ログインフォームのオートコンプリートを無効にする場合に便利です。ログインページに XSS ベクターが存在する場合を想像してみてください。
+悪意のあるユーザが次のようなペイロードを作成した場合、
 
 ```javascript
 window.setTimeout(function() {
@@ -187,27 +168,25 @@ window.setTimeout(function() {
 ), 10000);
 ```
 
-It will send the autocomplete form fields to the `attacker_site.com`.
+これは、オートコンプリートされたフォームフィールドを `attacker_site.com` に送信します。
 
-### Cache
+### キャッシュ
 
-Cache control in pages that contain sensitive information should be disabled.
-
-This can be achieved by setting the corresponding header flags, as shown in the
-following snippet:
+機密情報を含むページのキャッシュ制御は無効にする必要があります。
+次のスニペットに示すように、対応するヘッダーフラグを設定することで実現できます。
 
 ```go
 w.Header().Set("Cache-Control", "no-cache, no-store")
 w.Header().Set("Pragma", "no-cache")
 ```
 
-The `no-cache` value tells the browser to revalidate with the server before
-using any cached response. It does not tell the browser to _not cache_.
 
-On the other hand, the `no-store` value is really about disabling caching
-overall, and must not store any part of the request or response.
+`no-cache` 値は、キャッシュされた応答を使用する前にサーバーで再検証するよう、ブラウザに指示します。これはブラウザにキャッシュをしないように指示するものではありません。
 
-The `Pragma` header is there to support HTTP/1.0 requests.
+一方、`no-store` 値はキャッシュを無効にするためのものです。
+リクエストやレスポンスのいかなる部分も保存させません。
+
+`Pragma` ヘッダーは HTTP/1.0 リクエストをサポートするために存在します。
 
 [1]: https://developer.mozilla.org/en-US/docs/Web/Security/Securing_your_site/Turning_off_form_autocompletion
 [2]: https://godoc.org/golang.org/x/crypto

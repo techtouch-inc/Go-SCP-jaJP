@@ -1,22 +1,19 @@
 HTTP/TLS
 =========
 
-`TLS/SSL` is a cryptographic protocol that allows encryption over otherwise
-insecure communication channels. The most common usage of TLS/SSL is to provide
-secure `HTTP` communication, also known as `HTTPS`. The protocol ensures that
-the following properties apply to the communication channel:
+TLS/SSLは、安全でない通信チャネルを暗号化することができるプロトコルです。
+TLS/SSLの最も一般的な使用法は、`HTTPS` とも呼ばれる安全な `HTTP` 通信を提供することです。
+このプロトコルは、通信チャネルに以下の特性が適用されることを保証します。
 
-* Privacy
-* Authentication
-* Data integrity
+* プライバシー
+* 認証
+* データの完全性
 
-Its implementation in Go is in the `crypto/tls` package.
-In this section we will focus on the Go implementation and usage.
-Although the theoretical part of the protocol design and its cryptographic
-practices are beyond the scope of this article, additional information is
-available on the [Cryptography Practices][1] section of this document.
+Goでの実装は `crypto/tls` パッケージにあります。
+このセクションでは、Goの実装と使い方に焦点を当てます。
+プロトコルの設計の理論的な部分と、暗号のプラクティスはこの記事の範囲外ですが、追加情報は[Cryptography Practices][1] を参照してください。
 
-The following is a simple example of HTTP with TLS:
+以下は、TLSを使用したHTTPの簡単な例です。
 
 ```go
 import "log"
@@ -33,21 +30,19 @@ func main() {
 }
 ```
 
-This is a simple out-of-the-box implementation of SSL in a webserver using Go.
-It's worth noting that this example gets an "A" grade on SSL Labs.
+これはGoを使ったウェブサーバーでのSSLのシンプルですぐ動かせる実装です。
+この例が SSL Labs で "A" グレードを獲得していることは注目に値します。
 
-To further improve the communication security, the following flag could be added
-to the header, in order to enforce HSTS (HTTP Strict Transport Security):
+通信のセキュリティをさらに向上させるために、以下のフラグをヘッダーに追加して、HSTS (HTTP Strict Transport Security) を強制することができます。
+
 ```go
 w.Header().Add("Strict-Transport-Security", "max-age=63072000; includeSubDomains")
 ```
 
-Go's TLS implementation is in the `crypto/tls` package. When using TLS, make
-sure that a single standard TLS implementation is used, and that it's
-appropriately configured.
+GoのTLSの実装は `crypto/tls` パッケージにあります。TLSを使うときは
+標準的なTLSの実装を1つだけ使用し、設定が適切なことを確認してください。
 
-Here's an example of implementing SNI (Server Name Indication) based on the
-previous example:
+さっきの例を用いて、以下に SNI (Server Name Indication) を実装する例を載せます。
 
 ```go
 ...
@@ -82,15 +77,10 @@ func main() {
 }
 ```
 
-It should be noted that when using TLS, the certificates should be valid, have
-the correct domain name, should not be expired, and should be installed with
-intermediate certificates when required as recommended in the [OWASP SCP Quick
-Reference Guide][2].
+TLSを使用する場合、証明書は有効であること、正しいドメイン名を持つこと、有効期限が切れていないことに、さらに[OWASP SCP Quick Reference Guide][2]で推奨されているように、必要な場合は中間証明書もインストールする必要があることに留意しましょう。
 
-**Important:** Invalid TLS certificates should always be rejected.
-Make sure that the `InsecureSkipVerify` configuration is not set
-to `true` in a production environment.  
-The following snippet is an example of how to set this:
+**重要:** 無効なTLS証明書は常に拒否されるべきです。 `InsecureSkipVerify` を `true` に設定しないように確認してください。 
+次のスニペットは、この設定方法の例です。
 
 ```go
 config := &tls.Config{InsecureSkipVerify: false}
@@ -102,12 +92,13 @@ Use the correct hostname in order to set the server name:
 config := &tls.Config{ServerName: "yourHostname"}
 ```
 
-Another known attack against TLS to be aware of is called POODLE. It is related
-to TLS connection fallback when the client does not support the server's cipher.
-This allows the connection to be downgraded to a vulnerable cipher.
+TLSに対して注意すべきもう一つの既知の攻撃は、POODLEと呼ばれるものです。これは
+これは、クライアントがサーバーの要求する暗号をサポートしていない場合のTLS接続フォールバックに関連するものです。
+これにより、接続を脆弱な暗号にダウングレードすることができます。
 
-By default, Go disables SSLv3, and the cipher's minimum version and maximum
-version can be set with the following configurations:
+デフォルトでは、GoはSSLv3を無効にし、暗号の最小バージョンと最大バージョンは以下の設定で設定できます。
+バージョンは次の設定で設定できます。
+
 
 ```go
 // MinVersion contains the minimum SSL/TLS version that is acceptable.
@@ -122,39 +113,29 @@ version can be set with the following configurations:
 MaxVersion uint16
 ```
 
-The safety of the used ciphers can be checked with [SSL Labs][4].
+使用されている暗号の安全性は、[SSL Labs][4]で確認することができます。
 
-An additional flag that is commonly used to mitigate downgrade attacks is the
-`TLS_FALLBACK_SCSV` as defined in [RFC7507][3]. In Go, there is no fallback.
+ダウングレード攻撃を軽減するためによく使われる追加のフラグは、[RFC7507][3]で定義されている `TLS_FALLBACK_SCSV` です。Goでは、フォールバックはありません。
 
-Quote from Google developer Adam Langley:
+Googleの開発者Adam Langleyからの引用です。
 
-> The Go client doesn't do fallback so it doesn't need to send TLS_FALLBACK_SCSV.
+> Goクライアントはフォールバックを行わないので、TLS_FALLBACK_SCSVを送信する必要はありません。
 
-Another attack known as CRIME affects TLS sessions that use compression.
-Compression is part of the core protocol, but it's optional. Programs written in
-the Go programming language are likely not vulnerable, simply because there is
-currently no compression mechanism supported by `crypto/tls`. An important
-note to keep in mind is if a Go wrapper is used for an external security
-library, the application may be vulnerable.
+CRIMEとして知られる別の攻撃は、圧縮を使用するTLSセッションに影響を与えます。
+圧縮はプロトコルのコア部分ですが、オプションです。Go で書かれたプログラムは脆弱ではないでしょう。なぜなら現在、`crypto/tls` はいずれの圧縮メカニズムをサポートしていないからです。Go でラッパーされた外部のセキュリティライブラリを利用した場合、アプリケーションは脆弱性を持つ可能性があることは十分に注意してください。
 
-Another part of TLS is related to the connection renegotiation. To guarantee no
-insecure connections are established, use the `GetClientCertificate` and its
-associated error code in case the handshake is aborted.
-The error code can be captured to prevent an insecure channel from being used.
+TLS のもう一つの側面んは、接続の再ネゴシエーションです。安全でない接続が確立されないことを保証するために、ハンドシェイクが中断された場合 `GetClientCertificate` とその関連するエラーコードが利用されます。
+エラーコードをキャプチャすることで、安全でないチャネルが使用されることを防ぐことができます。
 
-All requests should also be encoded to a pre-determined character encoding such
-as UTF-8.
-This can be set in the header:
+すべてのリクエストは、UTF-8 のようなあらかじめ決められた文字エンコーディングでエンコードされるべきです。
+これはヘッダーに設定することができます。
 
 ```go
 w.Header().Set("Content-Type", "Desired Content Type; charset=utf-8")
 ```
 
-Another important aspect when handling HTTP connections is to verify that the
-HTTP header does not contain any sensitive information when accessing external
-sites. Since the connection could be insecure, the HTTP header may leak
-information.
+HTTPコネクションを扱う際のもう一つの重要な点は、外部へのアクセス時に、HTTPヘッダーに機密情報が含まれていないことです。
+接続が安全でないため、HTTPヘッダーから情報が漏れる可能性があります。
 
 ![HTTP Header Leak](img/InsecureHeader.png)
 Image Credits : [John Mitchell][5]
