@@ -1,42 +1,35 @@
-Parameterized Queries
+パラメタライズドクエリ
 =====================
 
-Prepared Statements (with Parameterized Queries) are the best and most secure
-way to protect against SQL Injections.
+プリペアドステートメント（パラメタライズドクエリ）は、SQL インジェクションから防御するための最も安全な方法です。
 
-In some reported situations, prepared statements could harm performance of the
-web application. Therefore, if for any reason you need to stop using this type
-of database queries, we strongly suggest you read [Input Validation][1] and
-[Output Encoding][2] sections.
+しかし、一部の報告では、プリペアド・ステートメントがWebアプリケーションのパフォーマンスを低下させる可能性があることが報告されています。したがって、何らかの理由でこの手のデータベースクエリを使用できない場合は、[入力のバリデーション][1]と[出力エンコーディング][2]を読むことを強くお勧めします。
 
-Go works differently from usual prepared statements on other languages - you
-don't prepare a statement on a connection. You prepare it on the DB.
+Go は他の言語でのプリペアドステートメントとは異なる動作をします。
+接続時にステートメントを準備するのではありません。DB上でステートメントを用意するのです。
 
-## Flow
+## フロー
 
-1. The developer prepares the statement (`Stmt`) on a connection in the pool
-2. The `Stmt` object remembers which connection was used
-3. When the application executes the `Stmt`, it tries to use that connection.
-   If it's not available it will try to find another connection in the pool
+1. 開発者はプール内のあるコネクションでステートメント(`Stmt`)を準備する。
+2. `Stmt` オブジェクトは、どのコネクションを使用したかを記憶する。
+3. アプリケーションが `Stmt` を実行するとき、記憶したコネクションを使用しようとする。
+   利用できない場合は、プール内の別のコネクションを探そうとします。
 
-This type of flow could cause high-concurrency usage of the database and creates
-lots of prepared statements. Therefore, it's important to keep this information
-in mind.
+このようなフローは、データベースの高同期使用を引き起こし、多くのプリペアドステートメントを作成することになります。したがって、このことを心に留めておくことが重要です。
 
-Here's an example of a prepared statement with parameterized queries:
+以下は、パラメータ化されたクエリを使用したプリペアドステートメントの例です。
 
 ```go
 customerName := r.URL.Query().Get("name")
 db.Exec("UPDATE creditcards SET name=? WHERE customerId=?", customerName, 233, 90)
 ```
 
-Sometimes a prepared statement is not what you want. There might be several
-reasons for this:
+プリペアドステートメントが、あなたの望むものでない場合もあります。いくつかの理由が考えられます。
 
-* The database doesn’t support prepared statements. When using the MySQL driver,
-  for example, you can connect to MemSQL and Sphinx, because they support the
-  MySQL wire protocol. But they don’t support the "binary" protocol that
-  includes prepared statements, so they can fail in confusing ways.
+* データベースがプリペアドステートメントをサポートしていない場合。
+MySQL ドライバを利用している場合、例えば、MemSQL と SphinxはMySQL は wire protocolをサポートしているので、接続することができます。しかし、それらはプリペアドステートメントを含む "バイナリ "プロトコルをサポートしていないため、紛らわしい形で失敗する可能性があります。
+
+* ステートメントが十分に再利用されないため、セキュリティの問題はアプリケーションスタックの別のレイヤーで処理される場合 (参照: [Input Validation][1] and [Output Encoding][2]) 。上記のようなパフォーマンスの向上は望めません。
 
 * The statements aren’t reused enough to make them worthwhile, and security
   issues are handled in another layer of our application stack

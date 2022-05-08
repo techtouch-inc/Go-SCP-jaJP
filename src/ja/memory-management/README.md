@@ -1,19 +1,15 @@
-Memory Management
+メモリ管理
 =================
 
-There are several important aspects to consider regarding memory management.
-Following the OWASP guidelines, the first step we must take to protect our
-application pertains to the user input/output. Steps must be taken to ensure no
-malicious content is allowed.
-A more detailed overview of this aspect is in the [Input Validation][1] and the
-[Output Encoding][2] sections of this document.
+メモリ管理に関して、考慮すべき重要な点がいくつかあります。
+OWASP のガイドラインに基づき、アプリケーションを保護するためには、まずユーザーの入出力に関連する措置を講じる必要があります。悪意のあるコンテンツが許可されないようにする必要があります。
+より詳細な概要は、[入力のバリデーション][1]および[出力エンコーディング][2]のセクションをご覧ください。
 
-Buffer boundary checking is another important aspect of memory management.
-checking. When dealing with functions that accept a number of bytes to copy,
-usually, in C-style languages, the size of the destination array must be
-checked, to ensure we don't write past the allocated space. In Go, data types
-such as `String` are not NULL terminated, and in the case of `String`, its
-header consists of the following information:
+バッファ境界のチェックも、メモリ管理の重要な側面です。
+コピーするバイト数を受け取る関数を扱う場合。C言語では通常，コピー先の配列の大きさをチェックし、割り当てられた領域を超えて書き込まないようにする必要があります。
+
+Go では、`String`のようなデータ型は NULL 終端ではありません。`String` の場合、そのヘッダは以下の情報で構成されます。
+
 
 ```go
 type StringHeader struct {
@@ -22,10 +18,10 @@ type StringHeader struct {
 }
 ```
 
-Despite this, boundary checks must be made (e.g. when looping).
-If we go beyond the set boundaries, Go will `Panic`.
+そうだとしても、境界のチェックは行わなければなりません（例えば、ループするとき）。
+もし、設定された境界を越えてしまうと、Go は `Panic` してしまいます。
 
-Here's a simple example:
+以下は簡単な例です。
 
 ```go
 func main() {
@@ -49,11 +45,9 @@ ddd
 panic: runtime error: index out of range
 ```
 
-When our application uses resources, additional checks must also be made to
-ensure they have been closed, and not rely solely on the Garbage Collector.
-This is applicable when dealing with connection objects, file handles, etc.
-In Go we can use `defer` to perform these actions. Instructions in `defer` are
-only executed when the surrounding functions finish execution.
+アプリケーションがリソースを使用する場合、ガベージコレクタだけに頼るのではなく、リソースがクローズされたことをチェックする必要があります。
+これは、コネクションオブジェクトやファイルハンドラーなどを扱うときに適用できます。
+Go では、これらのアクションを実行するために `defer` を使用することができます。`defer` 内の命令は、他の関数が実行を終了したときにのみ実行されます。
 
 ```go
 defer func() {
@@ -61,25 +55,21 @@ defer func() {
 }
 ```
 
-More information regarding `defer` can be found in the [Error Handling][3]
-section of the document.
+`defer` に関するより詳しい情報は、このドキュメントの [エラー処理][3] のセクションにあります。
 
-Usage of functions that are known to be vulnerable should also be avoided. In
-Go, the `Unsafe` package contains these functions. They should not be used in
-production environments, nor should the package be used as well. This also
-applies to the `Testing` package.
+また、脆弱であることが知られている関数の使用も避けるべきです。
+Go では、 `Unsafe` パッケージにこれらの関数が含まれています。これらの関数は、プロダクション環境やプロダクション環境で使われるパッケージでは使用しないでください。
+`Testing` パッケージも同様です。
 
-On the other hand, memory deallocation is handled by the garbage collector,
-which means that we don't have to worry about it. Please note, it _is_ possible
-to manually deallocate memory, although it is _not_ advised.
+一方、メモリの解放はガベージコレクタによって処理されるため、心配する必要はありません。
+手動でメモリ割り当ての解放をすることは可能ですが推奨しません。
 
-Quoting [Golang's Github](https://github.com/golang/go/issues/13761):
+[Go言語のGithub](https://github.com/golang/go/issues/13761)を引用します。
 
-> If you really want to manually manage memory with Go, implement your own
-> memory allocator based on syscall.Mmap or cgo malloc/free.
+> もし本当にGoでメモリを手動で管理したいのであれば、あなた自身で
+> syscall.Mmap や cgo malloc/free をベースにした独自のメモリアロケータを実装してください。
 >
-> Disabling GC for extended period of time is generally a bad solution for a
-> concurrent language like Go. And Go's GC will only be better down the road.
+> GC を長期間無効にすることは、Go のような並行処理言語では一般に悪手です。Go の GC はこれからもずっと改善されていくことでしょう。
 
 [1]: ../input-validation/README.md
 [2]: ../output-encoding/README.md

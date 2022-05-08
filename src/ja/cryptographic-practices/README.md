@@ -201,7 +201,6 @@ https://godoc.org/golang.org/x/crypto で実装されているので、開発者
 [^1]: レインボーテーブル攻撃は、ハッシュアルゴリズム自体の弱点ではありません。
 [^2]: [認証とパスワード管理][3]のセクションを読んで、認証情報のための強いソルト付き一方向性ハッシュを考慮してください。
 
-
 [1]: https://golang.org/pkg/crypto/
 [2]: https://golang.org/pkg/crypto/md5/
 [3]: ../authentication-password-management/README.md

@@ -1,30 +1,24 @@
-Stored Procedures
+ストアドプロシージャ
 =================
 
-Developers can use Stored Procedures to create specific views on queries to
-prevent sensitive information from being archived, rather than using normal
-queries.
+ストアドプロシージャを使用すると、クエリに対して特定のビューを作成し、機密情報がアーカイブされないようにすることができます。
 
-By creating and limiting access to stored procedures, the developer is adding
-an interface that differentiates who can use a particular stored procedure from
-what type of information he can access. Using this, the developer makes the
-process even easier to manage, especially when taking control over tables and
-columns in a security perspective, which is handy.
+ストアドプロシージャを作成し、アクセスを制限することで、誰が特定のストアドプロシージャを使用できるか、誰がどの種類の情報にアクセスできるかを区別するためのインターフェイスが追加されます。
+これによって特にテーブルやカラムをセキュリティの観点から制御するプロセスがより簡単に管理できます。
 
-Let's take a look into at an example...
+例を見てみましょう。
 
-Imagine you have a table with information containing users' passport IDs.
+ユーザーのパスポートIDを含む情報を持つテーブルがあるとします。
 
-Using a query like:
+このようなクエリを使用します。
 
 ```SQL
 SELECT * FROM tblUsers WHERE userId = $user_input
 ```
 
-Besides the problems of [Input validation][1], the database user (for the
-example John) could access __ALL__ information from the user ID.
+[入力のバリデーション][1]の問題は置いておくとして、データベースのユーザー(例：John)は、ユーザーIDを使って全ての情報にアクセスすることができます。
 
-What if John only has access to use this stored procedure:
+もし、Johnがこのストアドプロシージャを使用する権限しか持っていないとしたらどうでしょう。
 
 ```SQL
 CREATE PROCEDURE db.getName @userId int = NULL
@@ -33,18 +27,15 @@ AS
 GO
 ```
 
-Which you can run just by using:
+これだけで実行できます。
 
 ```
 EXEC db.getName @userId = 14
 ```
 
-This way you know for sure that user John only sees `name` and `lastname` from
-the users he requests.
+この方法によって、ユーザー John がリクエストしたユーザーの `name` と `lastname` だけを見れることを確信できます。
 
-Stored procedures are not _bulletproof_, but they create a new layer of
-protection to your web application. They give DBAs a big advantage over
-controlling permissions (e.g. users can be limited to specific rows/data),
-and even better server performance.
+ストアドプロシージャは盾ではありませんが、ウェブアプリケーションを保護するための新しいレイヤーを作成することができます。
+ストアドプロシージャはDBAに、パーミッション制御 (例: ユーザーを特定の行やデータに制限する) とサパフォーマンスも向上に利益をもたらします。
 
 [1]: /input-validation/README.md

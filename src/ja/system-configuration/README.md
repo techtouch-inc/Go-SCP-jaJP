@@ -1,28 +1,25 @@
-System Configuration
+システム構成
 ====================
 
-Keeping things updated is imperative in security. With that in mind, developers
-should keep Go updated to the latest version, as well as external packages and
-frameworks used by the web application.
+セキュリティにおいて、常に最新の状態に保つことは必須です。このことを念頭に置いて、開発者は
+開発者は、Go を常に最新版に更新し、Web アプリケーションで使用する外部パッケージや
+フレームワークも最新のものに更新しておく必要があります。
 
-Regarding HTTP requests in Go, you need to know that any incoming server
-requests will be done either in HTTP/1.1 or HTTP/2. If the request is made
-using:
+Go では、サーバーへのリクエストはすべて HTTP/1.1 か HTTP/1.2 で行われることを知っておく必要があります。
 
 ```go
 req, _ := http.NewRequest("POST", url, buffer)
 req.Proto = "HTTP/1.0"
 ```
 
-[Proto][3] will be ignored and the request will be made using HTTP/1.1.
+[Proto][3] は無視され、HTTP/1.1によるリクエストとなります。
 
-## Directory listings
+## ディレクトリの一覧表示
 
-If a developer forgets to disable directory listings (OWASP also calls it
-[Directory Indexing][4]), an attacker could check for sensitive files navigating
-through directories.
+開発者がディレクトリ一覧表示(OWASPでは[Directory Indexing][4]と呼ぶ)を無効にするのを忘れた場合
+、攻撃者はディレクトリ内を移動して機密ファイルをチェックすることができます。
 
-If you run a Go web server application, you should also be careful with this:
+Go ウェブサーバアプリケーションを動かしているなら、この点にも注意する必要があります。
 
 ```go
 http.ListenAndServe(":8080", http.FileServer(http.Dir("/tmp/static")))
@@ -33,19 +30,19 @@ have a test directory that has a sensitive file inside. What happen next?
 
 ![password file is shown](files/index_file.png)
 
-Why does this happen?
-Go tries to find an `index.html` inside the directory, and if it
-doesn't exist, it will show the directory listing.
+なぜこのようなことが起こるのでしょうか？
+Go はディレクトリの中にある `index.html` を探そうとします。
+が存在しない場合、ディレクトリのリストを表示します。
 
-To fix this, you have three possible solutions:
+これを解決するには、3つの解決策があります。
 
-* Disable directory listings in your web application
-* Restrict access to unnecessary directories and files
-* Create an index file for each directory
+* ウェブアプリケーションでディレクトリのリストを表示しないようにする。
+* 不要なディレクトリやファイルへのアクセスを制限する。
+* 各ディレクトリにインデックスファイルを作成する
 
-For the purpose of this guide, we'll describe a way to disable directory listing.
-First, a function was created that checks the path being requested and if it
-can be shown or not.
+本ガイドでは、ディレクトリの一覧表示を無効にする方法を説明します。
+まず、リクエストされたパスをチェックし、表示可能かどうかを確認する関数を作成し
+表示させる関数を作成します。
 
 ```go
 type justFilesFilesystem struct {
@@ -61,77 +58,72 @@ func (fs justFilesFilesystem) Open(name string) (http.File, error) {
 }
 ```
 
-Then we simply use it in our `http.ListenAndServe` as follows:
+そして、次のように `http.ListenAndServe` に対して使用するだけです。
 
 ```go
 fs := justFilesFilesystem{http.Dir("tmp/static/")}
 http.ListenAndServe(":8080", http.StripPrefix("/tmp/static", http.FileServer(fs)))
 ```
 
-Note that our application is only allowing the `tmp/static/` path to be
-displayed. When we try to access our protected file directly, we get this:
+このアプリケーションでは、`tmp/static/` のパスだけ閲覧を許可していることに注意してください。
+保護されたファイルに直接アクセスしようとすると、次のようになります。
 
 ![password not shown](files/safe.png)
 
-And if we try to list our `test/` folder to get a directory listing, we are
-also shown the same error.
+また、`test/` フォルダに対してディレクトリリスティングしようしても、同じエラーが表示されます。
 
 ![no listing](files/safe2.png)
 
-## Remove/Disable what you don't need
+## 不要なものの削除/無効化
 
-On production environments, remove all functionalities and files that you don't
-need. Any test code and functions not needed on the final version
-(ready to go to production), should stay on the developer layer, and not in a
-location everyone can see - _aka_ public.
+本番環境では、不要な機能およびファイルをすべて削除してください。
+(本番環境へ移行する)最終バージョンで必要とされないテストコードや機能は、開発者レイヤーに留めておくべきです。
+誰もが見ることができる場所、つまり公開される場所には置かないようにしましょう。
+
+HTTPレスポンスヘッダもチェックすべきです。以下のような機密情報を開示するヘッダは削除してください。
+のような機密情報を開示するヘッダを削除します。
+
+* OSのバージョン
+* ウェブサーバーのバージョン
+* フレームワークやプログラミング言語のバージョン
 
 HTTP Response Headers should also be checked. Remove the headers which disclose
 sensitive information like:
 
-* OS version
-* Webserver version
-* Framework or programming language version
-
 ![Example of version disclosure on HTTP headers](files/headers_set_versions.jpg)
 
-This information can be used by attackers to check for vulnerabilities in the
-versions you disclose, therefore, it is advised to remove them.
+攻撃者がバージョンの脆弱性を確認するために使用される可能性があるため、削除することをお勧めします。
 
-By default, this is not disclosed by Go. However, if you use any type of
-external package or framework, don't forget to double-check it.
+デフォルトでは、Goによって開示されることはありません。しかし、もしあなたが何らかの外部パッケージやフレームワークを使用している場合は、ダブルチェックを忘れないようにしてください。
 
-Try to find something like:
+以下のようなものを探してみてください。
 
 ```go
 w.Header().Set("X-Request-With", "Go Vulnerable Framework 1.2")
 ```
 
-You can search the code for the HTTP header that is being disclosed and
-remove it.
+公開されているHTTPヘッダーのコードを探して、削除することができます。
 
-Also you can define which HTTP methods the web application will support.
-If you only use/accept POST and GET, you can implement CORS and use the
-following code:
+また、ウェブアプリケーションがサポートするHTTPメソッドを定義することができます。
+POST と GET しか使わない/受け入れない場合は、CORS を実装して次のようにします。
 
 ```go
 w.Header().Set("Access-Control-Allow-Methods", "POST, GET")
 ```
 
-Don't worry about disabling things like WebDAV. If you want to implement a
-WebDAV server, you need to [import a package][2].
+WebDAVなどの無効化は気にしないでください。もし
+WebDAV サーバを実装したい場合は、[パッケージのインポート][2]が必要です。
 
-## Implement better security
+## より良いセキュリティを実現する
 
-Keep security in mind and follow the [least privilege principle][1] on the web
-server, processes, and service accounts.
+セキュリティを考慮し、サーバ、プロセス、およびサービスアカウントについて、[最小権限の原則][1]に従いましょう。
 
-Take care of your web application error handling. When exceptions occur, fail
-securely. You can check [Error Handling and Logging][5] section in this guide
-for more information regarding this topic.
+Web アプリケーションのエラー処理に気をつけましょう。例外が発生したら、安全に失敗しましょう。このトピックの詳細については、[エラー処理とログ記録][5]のセクションを参照してください。
 
-Prevent disclosure of the directory structure on your `robots.txt` file.
-`robots.txt` is a direction file and __NOT__ a security control.
-Adopt a white-list approach as follows:
+
+`robots.txt` ファイルによってディレクトリ構造が漏れないようにしましょう。
+`robots.txt` はディレクションファイルであり、セキュリティコントロールではありません。
+以下のように、ホワイトリスト方式を採用すしましょう。
 
 ```
 User-agent: *

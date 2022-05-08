@@ -1,18 +1,18 @@
-File Management
+ファイル管理
 ===============
 
-The first precaution to take when handling files is to make sure the users are
-not allowed to directly supply data to any dynamic functions. In languages like
-PHP, passing user data to _dynamic include_ functions, is a serious security
-risk. Go is a compiled language, which means there are no `include` functions,
-and libraries aren't usually loaded dynamically[^1].
+ファイルを扱う際の最初の注意点は、ユーザーが動的関数に直接データを渡せないようにすることです。
+PHPのような言語では、動的に include された関数にユーザーデータを渡すことは、深刻なセキュリティリスクとなりえます。Go はコンパイルされた言語なので、 `include` 関数は存在しません。
+また、ライブラリは通常、動的にロードされません[^1]。
 
-File uploads should only be permitted from authenticated users.
-After guaranteeing that file uploads are only made by authenticated users,
-another important aspect of security is to make sure that only acceptable
-file types can be uploaded to the server (_whitelisting_).
-This check can be made using the following Go function that detects MIME types:
-`func DetectContentType(data []byte) string`
+ファイルのアップロードは認証されたユーザーからしか許可されるべきではありません。
+それを補償した上で、許容されるファイルタイプのみがアップロードできるようにすること（ホワイトリスティング）も、セキュリティ上のもう一つの重要な観点です。
+このチェックは、MIME タイプを検出する以下の Go 関数`func DetectContentType(data []byte) string` を使用して行うことができます。
+
+以下は、ファイルを読み込んでファイルタイプを計算する簡単なプログラム([filetype.go][0])の関連部分です。
+
+File Management
+===============
 
 Below you find the relevant parts of a simple program to read and compute
 filetype ([filetype.go][0])
@@ -29,9 +29,8 @@ _, err = file.Read(buff)
 filetype := http.DetectContentType(buff)
 ```
 
-After identifying the filetype, an additional step is required to validate the
-filetype against a whitelist of allowed filetypes. In the example, this is
-achieved in the following section:
+ファイルタイプを特定した後、許可されるファイルタイプのホワイトリストに照らし合わせます。
+この例では、次のセクションで行います。
 
 ```go
 {...}
@@ -48,35 +47,24 @@ default:
 {...}
 ```
 
-Files uploaded by users should not be stored in the web context of the
-application. Instead, files should be stored in a content server or in a
-database. An important note is for the selected file upload destination not to
-have execution privileges.
+ユーザーがアップロードしたファイルは、アプリケーションのウェブコンテキストに保存されるべきではありません。
+代わりに、ファイルはコンテンツサーバーやデータベースに保存されるべきです。
+ファイルのアップロード先が実行権限を持たないように注意してください。
 
-If the file server that hosts user uploads is \*NIX based, make sure to
-implement safety mechanisms like chrooted environment, or mounting the target
-file directory as a logical drive.
 
-Again, since Go is a compiled language, the usual risk of uploading files that
-contain malicious code that can be interpreted on the server-side, is
-non-existent.
+アップロード先のファイルサーバーがNIX系の場合、chroot環境や論理ドライブとしてマウントするなどの安全策を講じてください。
 
-In the case of dynamic redirects, user data should not be passed. If it is
-required by your application, additional steps must be taken to keep the
-application safe. These checks include accepting only properly validated data
-and relative path URLs.
+再びですが、Goはコンパイル言語であるため、アップロードされるファイルに悪意のあるコードが含まれていても実行されるリスクは、通常存在しません。
 
-Additionally, when passing data into dynamic redirects, it is important to make
-sure that directory and file paths are mapped to indexes of pre-defined lists
-of paths, and to use these indexes.
+動的なリダイレクトを通してユーザーデータは渡されるべきではありません。もしそれが必要な場合、アプリケーションを安全に保つために追加の手順を踏まなければなりません。
+このようなチェックには、適切に検証されたデータのみを受け入れることと、相対パスURLのチェックを含みます。
 
-Never send the absolute file path to the user, always use relative paths.
+さらに、動的なリダイレクトでデータを渡す場合は、ディレクトリやファイルのパスがあらかじめ定義されたパスのリストのインデックスにマップされていることを確認し、そのインデックスを使用することが重要です。
 
-Set the server permissions regarding the application files and resources to
-`read-only`. And when a file is uploaded, scan the file for viruses and malware.
+ファイルの絶対パスはユーザーに絶対に送らず、常に相対パスを送ってください。
 
-[^1]:  Go 1.8 does allow dynamic loading now, via [the new plugin mechanism]( https://golang.org/pkg/plugin/).
-       If your application uses this mechanism, you should take precautions
-       against user-supplied input.
+アプリケーションファイルやリソースに関するサーバーのパーミッションを読み取り専用にし、ファイルがアップロードされたら、ウイルスやマルウェアがないかスキャンしましょう。
+
+[^1]:  Go 1.8 では、[新しいプラグイン機構]( https://golang.org/pkg/plugin/ ) を介して動的ロードができるようになりました。このメカニズムを使用するアプリケーションでは、ユーザーの入力に対して予防策を講じる必要があります。
 
 [0]: ./filetype/filetype.go
