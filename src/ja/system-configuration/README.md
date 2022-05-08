@@ -134,49 +134,42 @@ Allow: /aboutus
 Disallow: /
 ```
 
-The example above will allow any user-agent or bot to index those specific
-pages, and disallow the rest. This way you don't disclose sensitive folders or
-pages - like admin paths or other important data.
+上記の例では、ユーザエージェントやボットに特定のページをインデックスさせ
+それ以外を拒否します。これによって、管理者のパスやその他の重要なデータなど、機密性の高いフォルダーやページ、つまり管理者パスやその他の重要なデータなど、を公開することはありません。
 
-Isolate the development environment from the production network. Provide the
-right access to developers and test groups, and better yet, create additional
-security layers to protect them. In most cases, development environments are
-easier targets to attacks.
+開発環境を本番ネットワークから分離する。開発者とテストグループに
+は適切なアクセスを提供し、さらに追加のセキュリティレイヤを作成して保護すると良いでしょう。
+多くの場合、開発環境の方が攻撃の対象としては容易です。
 
-Finally, but still very important, is to have a software change control system
-to manage and record changes in your web application code (development and
-production environments). There are numerous Github host-yourself clones that
-can be used for this purpose.
+最後に、非常に重要なことですが、ソフトウェア変更管理システムを導入して
+ウェブアプリケーションのコード（開発環境と本番環境）の変更を管理し、記録しましょう。
+このために使用できる Github のセルフホスティング式クローンが数多く存在します。
 
-## Asset Management System:
+## 資産管理システム
 
-Although an `Asset Management System` is not a Go specific issue, a short
-overview of the concept and its practices are described in the following
-section.
+資産管理システムは、Go固有の問題ではありませんが、その概念と実践の簡単な概要を以下に説明します。
 
-`Asset Management` encompasses the set of activities  that an organization
-performs in order to achieve the optimum performance of their assets in line
-with its objectives, as well as the evaluation of the required level of security
-of each asset.
-It should be noted that in this section, when we refer to _Assets_, we are not
-only talking about the system's components but also its software.
+資産管理は、資産が目的に応じて最適なパフォーマンスを達成するために、組織が行う一連の活動が含まれます。
+また、各資産に求められるセキュリティレベルを評価することも含まれます。
 
-The steps involved in the implementation of this system are as follows:
+このセクションで、「資産」という場合、システムの構成要素だけでなくそのソフトウェアについても言及しています。
 
-1. Establish the importance of information security in business.
-2. Define the scope for AMS.
-3. Define the security policy.
-4. Establish the security organization structure.
-5. Identify and classify the assets.
-6. Identify and assess the risks
-7. Plan for risk management.
-8. Implement risk mitigation strategy.
-9. Write the statement of applicability.
-10. Train the staff and create security awareness.
-11. Monitor and review the AMS performance.
-12. Maintain the AMS and ensure continual improvement.
+システム導入の手順は以下の通りです。
 
-A more in-depth analysis of this implementation can be found [here][5].
+1. ビジネスにおける情報セキュリティの重要性を確立する。
+2. AMS の適用範囲を明確にする。
+3. セキュリティポリシーを定める。
+4. セキュリティ組織体制を構築する。
+5. 資産の特定と分類を行う。
+6. リスクを特定し評価する。
+7. リスクマネジメントを計画する。
+8. リスク軽減戦略を実施する。
+9. 適用可能性を記述する。
+10. スタッフを訓練し、セキュリティ意識を向上させる。
+11. AMSの性能を監視し、見直す。
+12. AMS を維持し、継続的に改善する。
+
+より詳細な分析は、[こちら][5]をご覧ください。
 
 [1]: https://www.owasp.org/index.php/Least_privilege
 [2]: https://godoc.org/golang.org/x/net/webdav

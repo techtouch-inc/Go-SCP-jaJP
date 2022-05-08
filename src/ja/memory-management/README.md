@@ -66,10 +66,9 @@ Go では、 `Unsafe` パッケージにこれらの関数が含まれていま�
 
 [Go言語のGithub](https://github.com/golang/go/issues/13761)を引用します。
 
-> もし本当にGoでメモリを手動で管理したいのであれば、あなた自身で
+> もし本当にGoでメモリを手動で管理したいのであれば、自力で
 > syscall.Mmap や cgo malloc/free をベースにした独自のメモリアロケータを実装してください。
->
-> GC を長期間無効にすることは、Go のような並行処理言語では一般に悪手です。Go の GC はこれからもずっと改善されていくことでしょう。
+> GC を長期間無効にすることは、Go のような並行処理言語では一般に悪手です。Go の GC はこれから先もずっと改善されていくことでしょう。
 
 [1]: ../input-validation/README.md
 [2]: ../output-encoding/README.md

@@ -1,54 +1,42 @@
-Regular Expressions
+正規表現
 ===================
 
-Regular Expressions are a powerful tool that's widely used to perform searches
-and validations. In the context of a web applications they are commonly used to
-perform input validation (e.g. Email address).
+正規表現は、検索やバリデーションを行うために広く使用されている強力なツールです。
+Webアプリケーションでは、入力のバリデーション(例: 電子メールアドレス)によく使われます。
 
-> Regular expressions are a notation for describing sets of character strings.
-> When a particular string is in the set described by a regular expression, we
-> often say that the regular expression matches the string. ([source][1])
+> 正規表現は、文字列の集合を記述するための表記法です。
+> ある文字列が正規表現で記述された集合に含まれる場合、その正規表現が文字列に一致すると言います。([出典][1])
 
-It is well-known that Regular Expressions are hard to master. Sometimes, what
-seems to be a simple validation, may lead to a [Denial-of-Service][2].
+正規表現を使いこなすのが難しいことはよく知られています。
+単純なバリでショーンでの利用が[DoS][2]につながることがあります。
 
-Go authors took it seriously, and unlike other programming languages, the
-decided to implement [RE2][3] for the [regex standard package][4].
+Goの作者はそれを真摯に受け止め、他のプログラミング言語とは異なり、[regex standard package][4]として[RE2][3]を実装することにしました。
 
-## Why RE2
+## RE2 の意義
 
-> RE2 was designed and implemented with an explicit goal of being able to handle
-> regular expressions from untrusted users without risk. ([source][10])
+> RE2 は、信頼できないユーザによって正規表現を利用されたとしても、リスクなく扱えるという明確な目標を持って設計・実装されました。([ソース][10])
 
-With security in mind, RE2 also guarantees a linear-time performance and
-graceful failing: the memory available to the parser, the compiler, and the
-execution engines is limited.
+セキュリティを考慮しつつ、RE２はパーサ、コンパイラ、実行エンジンが利用可能なメモリを制限することで、線形時間性能とグレースフルフェイルを保証します。
 
-## Regular Expression Denial of Service (ReDoS)
+## 正規表現DoS (ReDoS)
 
-> Regular Expression Denial of Service (ReDoS) is an algorithmic complexity
-> attack that provokes a Denial of Service (DoS). ReDos attacks are caused by a
-> regular expression that takes a very long time to be evaluated, exponentially
-> related with the input size. This exceptionally long time in the evaluation
-> process is due to the implementation of the regular expression in use, for
-> example, recursive backtracking ones. ([source][8])
+> 正規表現DoS（ReDoS）とは、アルゴリズム複雑性を利用したサービス拒否（DoS）を誘発する攻撃です。
+> ReDoS攻撃は、入力サイズに対して指数関数的に評価に長い時間を要する正規表現によって引き起こされます。
+> これは、使用されている正規表現の実装に起因するものです。
+> 例えば、再帰的なバックトラックのようなものが原因です。([ソース][8])
 
-You're better off reading the full article "[Diving Deep into Regular Expression
-Denial of Service (ReDoS) in Go][8]" as it goes deep into the problem, and also
-includes comparisons between the most popular programming languages. In this
-section we will focus on a real-world use case.
+詳しくは[Diving Deep into Regular Expression Denial of Service（ReDoS）in Go][8]という記事を読むとよいでしょう。
+最も人気のある他のプログラミング言語との比較も含まれています。この章ではでは、実際のユースケースに焦点を当てます。
 
-Say for some reason you're looking for a Regular Expression to validate Email
-addresses provided on your signup form. After a quick search, you found this
-[RegEx for email validation at RegExLib.com][9]:
+何らかの理由で、サインアップフォームで提供された電子メールアドレスの妥当性を確認するための正規表現を探しているとします。ざっと探したところ、次のようなものが見つかりました。
+[RegEx for email validation at RegExLib.com][9]：
 
 ```
 ^([a-zA-Z0-9])(([\-.]|[_]+)?([a-zA-Z0-9]+))*(@){1}[a-z0-9]+[.]{1}(([a-z]{2,3})|([a-z]{2,3}[.]{1}[a-z]{2,3}))$
 ```
 
-If you try to match `john.doe@somehost.com` against this regular expression you
-may feel confident that it does what you're looking for. If you're developing
-using Go, you'll come up with something like this:
+この正規表現に対して `john.doe@somehost.com` をマッチさせようとすると
+探しているものにマッチしているものだと確信できるかもしれません。次のようなもものを思いつくでしょう。
 
 ```go
 package main
@@ -70,7 +58,7 @@ func main() {
 }
 ```
 
-Which is not a problem:
+これは問題ありません。
 
 ```
 $ go run src/redos.go
@@ -78,7 +66,8 @@ true
 false
 ```
 
-However, what if you're developing with, for example, JavaScript?
+しかし、例えばJavaScriptで開発している場合はどうでしょうか？
+
 
 ```JavaScript
 const testString1 = 'john.doe@somehost.com';
@@ -92,28 +81,22 @@ console.log(regex.test(testString2));
 
 ```
 
-In this case, **execution will hang forever** and your application will service
-no further requests (at least this process). This means **no further signups
-will work until the application gets restarted**, resulting in **business
-losses**.
+この場合、**実行は永遠にハングアップします**（少なくともこのプロセスでは）。**再実行をかけなければこれ以降のサインアップが不可能であることを意味します。**
+結果として**ビジネス損失**となります。
 
-## What's missing?
+## 何が不足なのか？
 
-If you have a background with other programming languages such as Perl, Python,
-PHP, or JavaScript, you should be aware of the differences regarding Regular
-Expression supported features.
+Perl、PHP、Python、JavaScript などの他のプログラミング言語の経験がある場合は、正規表現がサポートする機能に関する違いに気がついているかもしれません。
 
-RE2 does not support constructs where only backtracking solutions are known to
-exist, such as [Backreferences][5] and [Lookaround][6].
+RE2 では、[Backreferences][5]や[Lookaround][6]のようなバックトラックによる解決法だけが知られている構文がサポートされていません。
 
-Consider the following problem: validating whether an arbitrary string is a
-well-formed HTML tag: a) opening and closing tag names match, and b) optionally
-there's some text in between.
+次のような問題を考えてみましょう。
+ある文字列が正しい HTML フォーマット
+a) 開閉タグ名が一致する。
+b) その間にテキストがある場合がある。
+なのか。
 
-Fulfilling requirement b) is straightforward `.*?`. But fulling requirement a)
-is challenging because closing a tag match depends on what was matched as the
-opening tag. This is exactly what Backreferences allows us to do. See the
-JavaScript implementation below:
+b)の条件を満たすのは簡単で、`.*?`です。しかし、要件 a) を満たすことは困難です。なぜなら、タグが正しく閉じているかは、開始タグとして何がマッチしたかに依存するからです。これはまさにバックトレースが可能にしてくれることです。以下のJavaScriptの実装をご覧ください。
 
 ```JavaScript
 const testString1 = '<h1>Go Secure Coding Practices Guide</h1>';
@@ -130,9 +113,9 @@ console.log(regex.test(testString3));
 
 ```
 
-`\1` will hold the value previously captured by `([A-Z][A-Z0-9]*)`.
+`\1` は、 `([A-Z][A-Z0-9]*)` で捕捉した値を保持します。
 
-This is something you should not expect to do in Go.
+これは、Goでも行えるとは思ってはいけません。
 
 ```go
 package main
@@ -155,7 +138,7 @@ func main() {
 
 ```
 
-Running the Go source code sample above should result in the following errors:
+上記のGoソースコードサンプルを実行すると、以下のようなエラーが発生するはずです。
 
 ```
 $ go run src/backreference.go
@@ -164,14 +147,13 @@ src/backreference.go:12:64: unknown escape sequence
 src/backreference.go:12:67: non-octal character in escape sequence: >
 ```
 
-You may feel tempted to fix these errors, coming up with the following regular
-expression:
+これらのエラーを修正するために、次のような正規表現を思いつくかもしれません。
 
 ```
 <([a-z][a-z0-9]*)\b[^>]*>.*?<\\/\\1>
 ```
 
-Then, this is what you'll get:
+得られるのは以下です。
 
 ```
 go run src/backreference.go
@@ -185,12 +167,9 @@ main.main()
 exit status 2
 ```
 
-While developing something from scratch, you'll probably find a nice workaround
-to help with the lack of some features. On the other hand, porting existing
-software could make you look for full featured alternative to the standard
-Regular Expression package, and you'll likely find some (e.g.
-[dlclark/regexp2][7]). Keeping that in mind, then you'll (probably) lose RE2's
-"safety features" such as the linear-time performance.
+フルスクラッチで開発すれば、いくつかの機能の不足を補うための素晴らしい回避策が見つかるかもしれません。一方、既存のソフトウェアを利用する場合、標準的な正規表現パッケージの代替となるフル機能の代替品を探すことになります。おそらくいくつか見つかるでしょう（例えば[dlclark/regexp2][7]。
+
+ただし、RE2の安全性と線形時間計算性能を捨てることになることを、念頭においてください。（おそらく）
 
 [1]: https://swtch.com/~rsc/regexp/regexp1.html
 [2]: #regular-expression-denial-of-service-redos

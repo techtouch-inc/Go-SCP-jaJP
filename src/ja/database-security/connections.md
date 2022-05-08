@@ -1,28 +1,23 @@
-Database Connections
+データベース接続
 ====================
 
-## The concept
+## コンセプト
 
-`sql.Open` does not return a database connection but `*DB`: a database
-connection pool. When a database operation is about to run (e.g. query), an
-available connection is taken from the pool, which should be returned to the
-pool as soon as the operation completes.
+`sql.Open` はデータベース接続を返すのではなく、 `*DB`: データベース接続プールを返します。
+データベース操作 (例: クエリ) が実行されようとすると、コネクションプールから利用可能なコネクションが取得されますが、操作が完了したらすぐにコネクションプールに返しましょう。
 
-Remember that a database connection will be opened only when first required to
-perform a database operation, such as a query.
-`sql.Open` doesn't even test database connectivity: wrong database credentials
-will trigger an error at the first database operation execution time.
+データベース接続は、クエリなどのデータベース操作の実行のために初めて要求とされたときにのみ開かれることに留意してください。
 
-Looking for a _rule of thumb_, the context variant of `database/sql` interface
-(e.g. `QueryContext()`) should always be used and provided with the appropriate
-[Context][3].
+`sql.Open` は、データベース接続のテストさえ行いません。
+クレデンシャルが間違っていると、最初のデータベース操作の実行時にエラーが発生します。
 
-From the official Go documentation "_Package context defines the Context type,
-which carries deadlines, cancelation signals, and other request-scoped values
-across API boundaries and between processes._".
-At a database level, when the context is canceled, a transaction will be rolled
-back if not committed, a Rows (from QueryContext) will be closed and any
-resources will be returned.
+経験則から言うと、`database/sql` インターフェースのコンテキストバリアント(例: `QueryContext()`) は、常に適切な[Context][3]で利用されます。
+
+Go の公式ドキュメントより "Package context は Context 型を定義します。
+API境界やプロセス間を横断して、デッドライン、キャンセルシグナル、その他のリクエストに対応した値を保持します。
+
+データベースレベルでは、コンテキストがキャンセルされると、コミットされない限りトランザクションはロールバックされます。
+(QueryContext の) Rows がクローズされ、すべてのリソースが返却されます。
 
 ```go
 package main
@@ -81,14 +76,14 @@ func (p *program) doOperation() error {
 }
 ```
 
-## Connection string protection
+## 接続文字列の保護
 
-To keep your connection strings secure, it's always a good practice to put the
-authentication details on a separated configuration file, outside of public
-access.
+接続文字列を安全に保つために、認証の詳細については、一般に公開されていない独立した設定ファイルに保存することをお勧めします。
 
-Instead of placing your configuration file at `/home/public_html/`, consider
-`/home/private/configDB.xml`: a protected area.
+設定ファイルを `/home/public_html/` に置くのではなく、
+`/home/private/configDB.xml`: 保護された領域を検討してください。
+
+Instead of placing your configuration file at `/home/public_html/`, consider `/home/private/configDB.xml`: a protected area.
 
 ```xml
 <connectionDB>
@@ -98,34 +93,33 @@ Instead of placing your configuration file at `/home/public_html/`, consider
 </connectionDB>
 ```
 
-Then you can call the configDB.xml file on your Go file:
+そして、Goファイル上で configDB.xml ファイルを呼び出すことができます。
 
 ```go
 configFile, _ := os.Open("../private/configDB.xml")
 ```
 
-After reading the file, make the database connection:
+ファイルを読み込んだら、データベース接続を行います。
 
 ```go
 db, _ := sql.Open(serverDB, userDB, passDB)
 ```
 
-Of course, if the attacker has root access, he will be able to see the file.
-Which brings us to the most cautious thing you can do - encrypt the file.
+もちろん、攻撃者がルートアクセス権を持っていれば、そのファイルを見ることができます。
+そこで、最も注意しなければならないのは、ファイルを暗号化することです。
 
-## Database Credentials
+## データベースのクレデンシャル
 
-You should use different credentials for every trust distinction and level, for
-example:
+信頼区分とレベルごとに異なるクレデンシャルを使用しましょう。
+例えば
 
-* User
-* Read-only user
-* Guest
-* Admin
+* ユーザー
+* 読み取り専用ユーザー
+* ゲスト
+* 管理者
 
-That way if a connection is being made for a read-only user, they could never
-mess up with your database information because the user actually can only read
-the data.
+こうすると、読み取り専用のユーザーが接続しても、そのユーザーは実際には読み取りしかできないので
+データベースを壊すことはできません。
 
 [1]: https://golang.org/pkg/database/sql/#DB.Close
 [2]: ../error-handling-logging/README.md

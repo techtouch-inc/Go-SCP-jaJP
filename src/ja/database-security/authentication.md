@@ -1,28 +1,24 @@
-Database Authentication
+データベース認証
 =======================
 
-## Access the database with minimal privilege
+## 最小限の権限でデータベースにアクセスする
 
-If your Go web application only needs to read data and doesn't need to write
-information, create a database user whose permissions are `read-only`.
-Always adjust the database user according to your web applications needs.
+Go ウェブアプリケーションがデータを読み取るだけで、情報を書き込む必要がない場合は、`read-only`の権限を持つデータベースユーザーを作成するだけで良いです。
+Web アプリケーションのニーズに応じて、データベースのユーザーを調整してください。
 
-## Use a strong password
+## 強いパスワードを使用する
 
-When creating your database access, choose a strong password. You can use
-password managers to generate a strong password.
+データベースアクセスを作成するとき、強力なパスワードを使いましょう。
+パスワードマネージャーを利用すると、強力なパスワードを生成できます。
 
-## Remove default admin passwords
+## デフォルトの管理者パスワードを削除する
 
-Most DBS have default accounts and most of them have no passwords on their
-highest privilege user.
+ほとんどのDBSはデフォルトのアカウントを持っており、そのほとんどにパスワードが設定せれていません。
 
-For example, MariaDB, and MongoDB use `root` with no password,
+例えば、MariaDBやMongoDBはパスワードなしの`root`を使用しています。
 
-Which means that if there is no password, the attacker could gain access to
-everything.
+つまり、パスワードがない場合、攻撃者はすべてにアクセスできてしまいます。
 
-Also, don't forget to remove your credentials and/or private key(s) if you're
-going to post your code on a publicly accessible repository in Github.
+また、コードを github で公開する場合は、認証情報や秘密鍵を削除することを忘れないでください。
 
 [1]: https://strongpasswordgenerator.com/

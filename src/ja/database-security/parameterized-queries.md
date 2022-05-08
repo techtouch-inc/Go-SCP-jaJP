@@ -15,7 +15,7 @@ Go は他の言語でのプリペアドステートメントとは異なる動�
 3. アプリケーションが `Stmt` を実行するとき、記憶したコネクションを使用しようとする。
    利用できない場合は、プール内の別のコネクションを探そうとします。
 
-このようなフローは、データベースの高同期使用を引き起こし、多くのプリペアドステートメントを作成することになります。したがって、このことを心に留めておくことが重要です。
+このようなフローは、データベースの高負荷な同時使用を引き起こし、多くのプリペアドステートメントを作成することになりえます。したがって、このことを心に留めておくことが重要です。
 
 以下は、パラメータ化されたクエリを使用したプリペアドステートメントの例です。
 
@@ -24,17 +24,12 @@ customerName := r.URL.Query().Get("name")
 db.Exec("UPDATE creditcards SET name=? WHERE customerId=?", customerName, 233, 90)
 ```
 
-プリペアドステートメントが、あなたの望むものでない場合もあります。いくつかの理由が考えられます。
+プリペアドステートメントが、望ましくない場合もあります。いくつかの理由が考えられます。
 
 * データベースがプリペアドステートメントをサポートしていない場合。
-MySQL ドライバを利用している場合、例えば、MemSQL と SphinxはMySQL は wire protocolをサポートしているので、接続することができます。しかし、それらはプリペアドステートメントを含む "バイナリ "プロトコルをサポートしていないため、紛らわしい形で失敗する可能性があります。
+MySQL ドライバを利用している場合、wire protocol をサポートしている　MemSQL や SphinxはMySQL に接続することができます。しかし、それらはプリペアドステートメントを含む "バイナリ "プロトコルをサポートしていないため、紛らわしい形で失敗する可能性があります。
 
-* ステートメントが十分に再利用されないため、セキュリティの問題はアプリケーションスタックの別のレイヤーで処理される場合 (参照: [Input Validation][1] and [Output Encoding][2]) 。上記のようなパフォーマンスの向上は望めません。
-
-* The statements aren’t reused enough to make them worthwhile, and security
-  issues are handled in another layer of our application stack
-  (See: [Input Validation][1] and [Output Encoding][2]), so performance
-  as seen above is undesired.
+* ステートメントが十分に再利用されないため、セキュリティの問題はアプリケーションスタックの別のレイヤーで処理される場合 (参照: [Input Validation][1] and [Output Encoding][2]) 。上記のようなパフォーマンスは望めません。
 
 [1]: ../input-validation/README.md
 [2]: ../output-encoding/README.md
