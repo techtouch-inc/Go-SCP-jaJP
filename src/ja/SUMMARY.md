@@ -1,6 +1,7 @@
 Summary
 =======
 
+* [日本語翻訳にあたって](translate-ja.md)
 * [はじめに](README.md)
 * [入力値のバリデーション](input-validation/README.md)
     * [バリデーション](input-validation/validation.md)
