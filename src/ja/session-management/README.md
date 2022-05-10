@@ -2,14 +2,14 @@
 ===========
 
 このセクションでは、OWASP's Secure Coding Practices に従ってセッション管理の最も重要な側面について説明します。具体例とそれに沿った、プラクティスの背後にある論理的根拠の概要を説明します。
-このセッションでテキストと合わせて分析するための完全なソースコードが入っているフォルダがあります。
-このセクションで分析するプログラムの セッションプロセスの流れは以下の画像の通りです。
+このセッションでテキストと合わせて分析するためのソースコードが入っているフォルダがあります。
+このセクションで分析するプログラムのセッションプロセスの流れは以下の画像の通りです。
 
 ![SessionManagementOverview](img/SessionManagementOverview.png)
 
 セッション管理において、アプリケーションはあくまでもサーバーのセッション管理コントロールを使用するべきで、セッションの作成は信頼できるシステムで行われるべきです。
 
-コード例において、アプリケーションは信頼できるシステム上でJWTを使用したセッションを作成します。
+コード例では、アプリケーションは信頼できるシステム上でJWTを使用してセッションを作成します。
 これは以下の関数で行われます。
 
 ```go
@@ -18,8 +18,6 @@ func setToken(res http.ResponseWriter, req *http.Request) {
   ...
 }
 ```
-We must ensure that the algorithms used to generate our session identifier are
-sufficiently random, to prevent session brute forcing.
 
 セッション識別子を生成するために使用されるアルゴリズムは、
 ブルートフォース（総当り）を防ぐために、十分にランダムであるものを利用してください。
@@ -30,11 +28,6 @@ token := jwt.NewWithClaims(jwt.SigningMethodHS256, claims)
 signedToken, _ := token.SignedString([]byte("secret")) //our secret
 ...
 ```
-
-Now that we have a sufficiently strong token, we must also set
-the `Domain`, `Path`, `Expires`, `HTTP only`, `Secure` for our cookies. In this
-case the `Expires` value is in this example set to 30 minutes since we are
-considering our application a low-risk application.
 
 十分に強力なトークンができたので、クッキーの `Domain`, `Path`, `Expires`, `HTTP only`, `Secure` を指定しましょう。
 今回の例では低リスクのアプリケーションを想定しているため、`Expires`の値を30分に設定しています。
@@ -57,20 +50,13 @@ http.SetCookie(res, &cookie) //Set the cookie
 サインインすると、常に新しいセッションが生成されます。古いセッションはたとえ有効期限が切れていなくても再利用されてはいけません。
 また、セッションハイジャックを防止するために`Expire`パラメータを使用して、定期的にセッションを終了強制します。
 クッキーのもう一つの重要な側面は、同一ユーザー名による同時ログインを禁止することです。
-ログインしているユーザーのリストを保持し、新しいログインユーザー名をこのリストと比較する。このアクティブなユーザーの一覧は通常、データベースに保存されます。
+ログインしているユーザーのリストを保持し、新しいログインユーザー名をこのリストと比較しましょう。このアクティブなユーザーの一覧は通常、データベースに保存されます。
 
 セッション識別子は、決してURLの中で公開してはいけません。セッション識別子は
 HTTP クッキーヘッダになくてはいけません。好ましくない例として、セッション識別子を GET パラメータとして受け渡してしまうような場合があります。
 またセッション情報は、他の認可されないユーザーによる不正なアクセスから保護する必要があります。
 
-
-Regarding HTTP to HTTPS connection changes, special care should be taken to
-prevent Man-in-the-Middle (MITM) attacks that sniff and potentially hijack the
-user's session. The best practice regarding this issue, is to use HTTPS in all
-requests. In the following example our server is using HTTPS.
-
-
-HTTP から HTTPS への接続変更については、ユーザーのセッション情報を窃取ハイジャックするようなMITM（Man-in-the-Middle）攻撃を防ぐために特に注意が必要です。
+HTTP から HTTPS への接続変更がある場合は、ユーザーのセッション情報を窃取ハイジャックするようなMITM（Man-in-the-Middle）攻撃を防ぐために特に注意が必要です。
 この問題に関するベストプラクティスは、すべてのセッションでHTTPSを使用することです。
 次の例では、サーバーはHTTPSを使用しています。
 
