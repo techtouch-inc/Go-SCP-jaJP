@@ -39,27 +39,26 @@ HTTPレスポンスヘッダ `Content-Type` が明示的に指定されていな
 
 ![Content-Type: text/plain][content-type-text-plain]
 
-逆にもし `param1` の文字列の最初を "&lt;h1&gt;"、とすると`Content-Type` は `text/html` が指定されます.
+逆にもし `param1` の文字列の最初を "&lt;h1&gt;"、とすると `Content-Type` は `text/html` が指定されます.
 
 ![Content-Type: text/html][content-type-text-html]
 
 `param1` を任意の HTML タグにすると同様な挙動を示すと思われるかもしれませんが、そうはなりません。
-`param1` を "&lt;h2&gt;"、"&lt;span&gt;"
-または"&lt;form&gt;" としても`Content-Type` は `text/html` ではなく `plain/text` になります。
+`param1` を "&lt;h2&gt;"、"&lt;span&gt;" または "&lt;form&gt;" としても`Content-Type` は `text/html` ではなく `plain/text` になります。
 
 ここで、`param1` を `<script>alert(1)</script>` としてみましょう。
 
-[WhatWG spec][5]で定義された通り、`Content-Type` HTTPレスポンスヘッダは、`text/html`として送信され、`param1`の値がそのままレンダリングされてしまい、XSS(クロスサイトスクリプティング）が成功します。
+[WhatWG spec][5] で定義された通り、`Content-Type` HTTP レスポンスヘッダは、`text/html` として送信され、`param1` の値がそのままレンダリングされてしまい、XSS(クロスサイトスクリプティング）が成功します。
 
 ![XSS - Cross-Site Scripting][cross-site-scripting]
 
-この状況についてGoogleに相談したところ、次のように教えてくれました。
+この状況について Google に相談したところ、次のように教えてくれました。
 
-> content-typeが自動的に設定されてブラウザで表示的されることは実用上便利であり、意図通りの挙動です。プログラマーが
-> `html/template`を使って適切にエスケープ処理することを期待します。
+> content-type が自動的に設定されてブラウザで表示的されることは実用上便利であり、意図通りの挙動です。プログラマーが
+> `html/template` を使って適切にエスケープ処理することを期待します。
 
-Googleは、開発者はサニタイズとコードの保護に責任を負うものだと述べています。
-私たちはそのことには完全に同意します。**しかし**、セキュリティが優先される言語で、`Content-Type` のデフォルトとして`text/plain`ではないものまで勝手に指定されてしまうことが最善とは言えません。
+Google は、開発者はサニタイズとコードの保護に責任を負うものだと述べています。
+私たちはそのことには完全に同意します。**しかし**、セキュリティが優先される言語で、`Content-Type` のデフォルトとして `text/plain` ではないものまで勝手に指定されてしまうことが最善とは言えません。
 
 `text/plain` や [text/template パッケージ][6] は、ユーザー入力をサニタイズしないので、XSS を回避できないということは肝に銘じましょう。
 
@@ -92,7 +91,7 @@ func main() {
 ![XSS while using text/template package][text-template-xss]
 
 
-[text/template][6]を[html/template][2]のものに置き換えることで、安全に処理できるようになります。
+[text/template][6] を [html/template][2] のものに置き換えることで、安全に処理できるようになります。
 
 ```go
 package main
