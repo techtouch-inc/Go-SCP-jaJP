@@ -55,6 +55,7 @@ http.SetCookie(res, &cookie) //Set the cookie
 セッション識別子は、決してURLの中で公開してはいけません。セッション識別子は
 HTTP クッキーヘッダになくてはいけません。好ましくない例として、セッション識別子を GET パラメータとして受け渡してしまうような場合があります。
 またセッション情報は、他の認可されないユーザーによる不正なアクセスから保護する必要があります。
+> 訳者注： kong のデフォルトでは queryString:jwt か header:authorization が有効で、cookie は使わないようになっている。 https://docs.konghq.com/hub/kong-inc/jwt/
 
 HTTP から HTTPS への接続変更がある場合は、ユーザーのセッション情報を窃取ハイジャックするようなMITM（Man-in-the-Middle）攻撃を防ぐために特に注意が必要です。
 この問題に関するベストプラクティスは、すべてのセッションでHTTPSを使用することです。
