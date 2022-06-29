@@ -3,7 +3,7 @@
 
 ## コンセプト
 
-`sql.Open` はデータベース接続を返すのではなく、 `*DB`: データベース接続プールを返します。
+`sql.Open` はデータベース接続を返すのではなく、`*DB`: データベース接続プールを返します。
 データベース操作 (例: クエリ) が実行されようとすると、コネクションプールから利用可能なコネクションが取得されますが、操作が完了したらすぐにコネクションプールに返しましょう。
 
 データベース接続は、クエリなどのデータベース操作の実行のために初めて要求とされたときにのみ開かれることに留意してください。
@@ -11,10 +11,12 @@
 `sql.Open` は、データベース接続のテストさえ行いません。
 クレデンシャルが間違っていると、最初のデータベース操作の実行時にエラーが発生します。
 
-経験則から言うと、`database/sql` インターフェースのコンテキストバリアント(例: `QueryContext()`) は、常に適切な[Context][3]で利用されます。
+経験則から言うと、`database/sql` インターフェースのコンテキストバリアント(例: `QueryContext()`) は、常に適切な [Context][3] と共に利用されるべきです。
 
-Go の公式ドキュメントより "Package context は Context 型を定義します。
-API境界やプロセス間を横断して、デッドライン、キャンセルシグナル、その他のリクエストに対応した値を保持します。
+Go の公式ドキュメントより
+
+"Package context は Context 型を定義します。
+API 境界やプロセス間を横断して、デッドライン、キャンセルシグナル、その他のリクエストに対応した値を保持します。"
 
 データベースレベルでは、コンテキストがキャンセルされると、コミットされない限りトランザクションはロールバックされます。
 (QueryContext の) Rows がクローズされ、すべてのリソースが返却されます。
@@ -81,9 +83,8 @@ func (p *program) doOperation() error {
 接続文字列を安全に保つために、認証の詳細については、一般に公開されていない独立した設定ファイルに保存することをお勧めします。
 
 設定ファイルを `/home/public_html/` に置くのではなく、
-`/home/private/configDB.xml`: 保護された領域を検討してください。
+`/home/private/configDB.xml` など保護された領域を検討してください。
 
-Instead of placing your configuration file at `/home/public_html/`, consider `/home/private/configDB.xml`: a protected area.
 
 ```xml
 <connectionDB>
@@ -93,19 +94,19 @@ Instead of placing your configuration file at `/home/public_html/`, consider `/h
 </connectionDB>
 ```
 
-そして、Goファイル上で configDB.xml ファイルを呼び出すことができます。
+そして、Go ファイル上で configDB.xml ファイルを呼び出します。
 
 ```go
 configFile, _ := os.Open("../private/configDB.xml")
 ```
 
-ファイルを読み込んだら、データベース接続を行います。
+ファイルを読み込んだら、データベースへ接続します。
 
 ```go
 db, _ := sql.Open(serverDB, userDB, passDB)
 ```
 
-もちろん、攻撃者がルートアクセス権を持っていれば、そのファイルを見ることができます。
+もちろん、攻撃者がルートアクセス権を持っていれば、そのファイルを見ることが可能です。
 そこで、最も注意しなければならないのは、ファイルを暗号化することです。
 
 ## データベースのクレデンシャル
