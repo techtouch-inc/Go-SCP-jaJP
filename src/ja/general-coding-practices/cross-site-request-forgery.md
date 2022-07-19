@@ -1,13 +1,13 @@
 クロスサイトリクエストフォージェリ
 ==========================
 
-[OWASP の定義][1]によると、Cross-Site Request Forgery (CSRF)とは、エンドユーザに認証済みのウェブアプリケーション上で望ましくない動作を実行させる攻撃である。([ソース][1])
+[OWASP の定義][1]によると、Cross-Site Request Forgery (CSRF)とは、エンドユーザに認証済みのウェブアプリケーション上で望ましくない動作を実行させる攻撃であるとされます。([ソース][1])
 
-CSRF攻撃は、データの盗難に焦点を当てたものではありません。その代わり、状態を変更するリクエストに狙いを定めています。攻撃者はちょっとしたソーシャルエンジニアリング（メールやチャットでのリンクの共有など）を用いて、ユーザーを騙して、アカウントの復旧用メールアドレスを変更するなどの望まないアクションをウェブサービスに対して実行させることができます。
+CSRF 攻撃は、データの盗難に焦点を当てたものではありません。その代わり、状態を変更するリクエストに狙いを定めています。攻撃者はちょっとしたソーシャルエンジニアリング（メールやチャットでのリンクの共有など）を用いて、ユーザーを騙して、アカウントの復旧用メールアドレスを変更するなどの望まないアクションをウェブサービスに対して実行させることができます。
 
 ## 攻撃のシナリオ
 
-例えば、`foo.com` が HTTP `GET` リクエストを使って、次のようにアカウント復旧用メールアドレスを設定するとしましょう。
+例えば、`foo.com` が HTTP `GET` リクエストを使って、次のようにアカウント復旧用メールアドレスを設定できるとしましょう。
 
 
 ```
@@ -50,7 +50,7 @@ HTTPメソッドを `GET` から `POST` (または別のメソッド) に変更�
 * 大きなランダム値であること
 * 暗号的に安全な乱数生成器によって生成されること
 
-**Note:** HTTP `GET` リクエストは状態を変化させないことが期待されていますが (そうあるべきと言われています)望ましくないプログラミングによって、実際にはリソースを変更することができます。リソースを変更することができます。そのため、CSRF 攻撃の標的になる可能性があります。
+**Note:** HTTP `GET` リクエストは状態を変化させないことが期待されていますが (そうあるべきと言われています)望ましくないプログラミングによって、実際にはリソースを変更できます。そのため、CSRF 攻撃の標的になる可能性があります。
 
 API については、`PUT` と `DELETE` もまた CSRF 攻撃の一般的な標的です。
 
@@ -58,9 +58,9 @@ API については、`PUT` と `DELETE` もまた CSRF 攻撃の一般的な標
 
 これをすべて手作業で行うのは、エラーが発生しやすいので、良いアイデアとは言えません。
 
-ほとんどのWebアプリケーションフレームワークは、すぐに使える解決策を提供しているため、それを有効にすることをお勧めします。もしあなたがフレームワークを使用していないなら、アドバイスとしては、フレームワークを採用することです。
+ほとんどの Web アプリケーションフレームワークは、すぐに使える解決策を提供しているため、それを有効にすることをお勧めします。もしあなたがフレームワークを使用していないなら、使用しましょう。
 
-次の例は、 Go ウェブアプリケーション向けの[Gorilla Web ツールキット][3]の一部です。
+次の例は、Go ウェブアプリケーション向けの[Gorilla Web ツールキット][3]の一部です。
 GitHub の [gorilla/csrf][4] にあります。
 
 ```go
@@ -104,10 +104,10 @@ func SubmitSignupForm(w http.ResponseWriter, r *http.Request) {
 }
 ```
 
-OWASPが詳細な[Cross-Site Request Forgery (CSRF) Prevention Cheat Sheet][5]を公開していますので、一読されることをお勧めします。
+OWASP が詳細な [Cross-Site Request Forgery (CSRF) Prevention Cheat Sheet][5] を公開していますので、一読されることをお勧めします。
 
-[1]: https://www.owasp.org/index.php/Cross-Site_Request_Forgery_(CSRF)
+[1]: https://cheatsheetseries.owasp.org/cheatsheets/Cross-Site_Request_Forgery_Prevention_Cheat_Sheet.html
 [2]: https://en.wikipedia.org/wiki/Cryptographic_nonce
 [3]: http://www.gorillatoolkit.org/
-[4]: https://github.com/gorilla/csrf 
-[5]: https://www.owasp.org/index.php/Cross-Site_Request_Forgery_(CSRF)_Prevention_Cheat_Sheet#Synchronizer_.28CSRF.29_Tokens
+[4]: https://github.com/gorilla/csrf
+[5]: https://cheatsheetseries.owasp.org/cheatsheets/Cross-Site_Request_Forgery_Prevention_Cheat_Sheet.html#synchronizer-token-pattern

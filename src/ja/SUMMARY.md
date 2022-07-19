@@ -33,7 +33,7 @@ Summary
     * [ストアドプロシージャ](database-security/stored-procedures.md)
 * [ファイル管理](file-management/README.md)
 * [メモリ管理](memory-management/README.md)
-* 一般的なコーディングプラクティス
+* [一般的なコーディングプラクティス](general-coding-practices/README.md)
     * [クロスサイトリクエストフォージェリ](general-coding-practices/cross-site-request-forgery.md)
     * [正規表現](general-coding-practices/regular-expressions.md)
 * [How To Contribute](howto-contribute.md)
