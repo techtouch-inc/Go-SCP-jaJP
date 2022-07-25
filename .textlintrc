@@ -1,10 +1,10 @@
 {
-	"rules": {
-		"prh": {
-			"rulePaths": [
-				"./techblog.yml"
-			]
-		},
+    "rules": {
+        "prh": {
+            "rulePaths": [
+                "./techblog.yml"
+            ]
+        },
         "sentence-length": {
             "max": 250
         },
@@ -42,7 +42,7 @@
             }
         },
         "preset-jtf-style": {
-            "3.1.1.全角文字と半角文字の間": false,
+            "3.1.1.全角文字と半角文字の間": true
         }
     },
     "filters": {
