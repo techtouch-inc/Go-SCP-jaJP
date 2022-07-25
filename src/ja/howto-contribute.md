@@ -10,7 +10,7 @@ Here are the basic of contributing to GitHub:
 3. Create an upstream remote and sync your local copy
 4. Branch each set of work
 5. Push the work to your own repository
-6. Create a new pull request
+6. Create a new Pull Request
 7. Look out for any code feedback and respond accordingly
 
 This book was built from ground-up in a "collaborative fashion", using a small
@@ -19,10 +19,10 @@ set of Open Source tools and technologies.
 Collaboration relies on [Git][1] - a free and open source distributed version
 control system and other tools around Git:
 * [Gogs][2] - Go Git Service, a painless self-hosted Git Service, which
-  provides a Github like user interface and workflow.
+  provides a GitHub like user interface and workflow.
 * [Git flow][3] - a collection of Git extensions to provide high-level
   repository operations for [Vincent Driessen's branching model][4];
-* [Git Flow Hooks][5] - some useful hooks for git-flow (AVH Edition) by
+* [Git Flow Hooks][5] - some useful hooks for Git-flow (AVH Edition) by
   [Jaspern Brouwer][6].
 
 The book sources are written on [Markdown format][7], taking advantage of
@@ -57,7 +57,7 @@ and run
 $ git flow init
 ```
 
-We're good to go with git flow default values.
+We're good to go with Git flow default values.
 
 In a nutshell, everytime you want to work on a section, you should start a
 "feature":
@@ -96,7 +96,7 @@ available, the project owner will do the release.
 
 While in the development stage, you can live-preview your work.
 To get Git Book tracking file changes and to live-preview your work, you just
-need to run the following command on a shell session
+need to run the following command on a shell セッション
 
 ```shell
 $ npm run serve
