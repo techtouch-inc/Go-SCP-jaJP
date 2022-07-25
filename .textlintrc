@@ -1,0 +1,57 @@
+{
+	"rules": {
+		"prh": {
+			"rulePaths": [
+				"./techblog.yml"
+			]
+		},
+        "sentence-length": {
+            "max": 250
+        },
+        "max-comma": {
+            "max": 5
+        },
+        "max-ten": {
+            "max": 5
+        },
+        "max-kanji-continuous-len": {
+            "max": 8
+        },
+        "no-mix-dearu-desumasu": {
+            "preferInHeader": "",
+            "preferInBody": "ですます",
+            "preferInList": "である",
+            "strict": false
+        },
+        "ja-no-mixed-period": false,
+        "no-double-negative-ja": true,
+        "no-dropping-the-ra": true,
+        "no-start-duplicated-conjunction": {
+            "interval": 2
+        },
+        "no-doubled-conjunctive-particle-ga": true,
+        "no-nfd": true,
+        "no-exclamation-question-mark": false,
+        "no-hankaku-kana": true,
+        "ja-no-weak-phrase": false,
+        "ja-no-successive-word": true,
+        "ja-no-abusage": true,
+        "preset-ja-spacing": {
+            "textlint-rule-ja-space-between-half-and-full-width": {
+                "space": "always"
+            }
+        },
+        "preset-jtf-style": {
+            "3.1.1.全角文字と半角文字の間": false,
+        }
+    },
+    "filters": {
+        "whitelist": {
+            "allow": [
+                "((",
+                "))",
+                "Webpack"
+            ]
+        }
+    }
+}
