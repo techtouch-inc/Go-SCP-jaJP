@@ -47,5 +47,3 @@ Go言語を使用した例と推奨事項を通して学習することで、一
 [6]: /howto-contribute.md
 [7]: https://www.twitter.com/checkmarx
 [8]: https://tour.golang.org/list
-
-API を叩く
