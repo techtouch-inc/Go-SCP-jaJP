@@ -10,6 +10,6 @@
 このセクションの範囲は、以下の通信チャネルを対象としています。
 
 * HTTP/HTTPS
-* ウェブソケット
+* Web ソケット
 
 [1]: https://www.owasp.org/index.php/Man-in-the-middle_attack

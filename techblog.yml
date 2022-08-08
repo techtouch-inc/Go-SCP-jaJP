@@ -1769,17 +1769,17 @@ rules:
     pattern:  /クォート|クオーテーション|クォーテーション/
   - expected: クオリティ
     pattern:  /クオリティー|クォリティ|クォリティー/
-  - expected: クライアント／サーバ
-    pattern:
-      - クライアント/サーバー
-      - クライアント/サーバ
-      - クライアント・サーバー
-      - クライアント・サーバ
-      - クライアントサーバー
-      - クライアントサーバ
-    specs:
-      - from: クライアント/サーバー
-        to:   クライアント／サーバ
+  # - expected: クライアント／サーバ
+  #   pattern:
+  #     - クライアント/サーバー
+  #     - クライアント/サーバ
+  #     - クライアント・サーバー
+  #     - クライアント・サーバ
+  #     - クライアントサーバー
+  #     - クライアントサーバ
+  #   specs:
+  #     - from: クライアント/サーバー
+  #       to:   クライアント／サーバ
   - expected: クラスタ
     pattern:  /クラスター/
   - expected: グラウンド
@@ -1816,8 +1816,11 @@ rules:
     pattern:  /コンポネント/
   - expected: コントローラ
     pattern:  /コントローラー/
-  - expected: サーバ
-    pattern:  /サーバー/
+  - expected: サーバー
+    pattern:  /サーバ(?!ー)/
+    specs:
+      - from: サーバ
+        to: サーバー
   - expected: サーブレット
     pattern:
       - Servlet
