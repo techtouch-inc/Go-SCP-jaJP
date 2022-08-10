@@ -1,4 +1,3 @@
-# Rules for techtouch techblog
 meta:
   reviewer:
     - test
@@ -50,186 +49,6 @@ rules:
       - 検討がつ
       - 検討がつ
     expected: 見当が付
-  - pattern: 思いつく
-    expected: 思い付く
-  - pattern:
-      - 1つ1つ
-      - 一つひとつ
-      - ひとつひとつ
-    expected: 一つ一つ
-  - pattern:
-      - 一人ひとり
-      - ひとりひとり
-      - 1人1人
-    expected: 一人一人
-  - pattern:
-      - 一つめ
-      - ひとつめ
-      - 一つ目
-      - ひとつ目
-    expected: 1つ目
-  - pattern:
-      - 二つめ
-      - ふたつめ
-      - 二つ目
-      - ふたつ目
-    expected: 2つ目
-  - pattern:
-      - 三つめ
-      - みっつめ
-      - 三つ目
-      - みっつ目
-    expected: 3つ目
-  - pattern:
-      - 四つめ
-      - よっつめ
-      - 四つ目
-      - よっつ目
-    expected: 4つ目
-  - pattern:
-      - 五つめ
-      - いつつめ
-      - 五つ目
-      - いつつ目
-    expected: 5つ目
-  - pattern:
-      - 六つめ
-      - むっつめ
-      - 六つ目
-      - むっつ目
-    expected: 6つ目
-  - pattern:
-      - 七つめ
-      - ななつめ
-      - 七つ目
-      - ななつ目
-    expected: 7つ目
-  - pattern:
-      - 八つめ
-      - やっつめ
-      - 八つ目
-      - やっつ目
-    expected: 8つ目
-  - pattern:
-      - 九つめ
-      - ここのつめ
-      - 九つ目
-      - ここのつ目
-    expected: 9つ目
-  - pattern:
-      - 一番目
-      - 一番め
-    expected: 1番目
-  - pattern:
-      - 二番目
-      - 二番め
-    expected: 2番目
-  - pattern:
-      - 三番目
-      - 三番め
-    expected: 3番目
-  - pattern:
-      - 四番目
-      - 四番め
-    expected: 4番目
-  - pattern:
-      - 五番目
-      - 五番め
-    expected: 5番目
-  - pattern:
-      - 六番目
-      - 六番め
-    expected: 6番目
-  - pattern:
-      - 七番目
-      - 七番め
-    expected: 7番目
-  - pattern:
-      - 八番目
-      - 八番め
-    expected: 8番目
-  - pattern:
-      - 九番目
-      - 九番め
-    expected: 9番目
-  - pattern:
-      - 十番目
-      - 十番め
-    expected: 10番目
-  - pattern:
-      - ふたつ
-      - 二つ
-    expected: 2つ
-  - pattern:
-      - みっつ
-      - 三つ
-    expected: 3つ
-  - pattern:
-      - よっつ
-      - 四つ
-    expected: 4つ
-  - pattern:
-      - いつつ
-      - 五つ
-    expected: 5つ
-  - pattern:
-      - むっつ
-      - 六つ
-    expected: 6つ
-  - pattern:
-      - ななつ
-      - 七つ
-    expected: 7つ
-  - pattern:
-      - やっつ
-      - 八つ
-    expected: 8つ
-  - pattern:
-      - ここのつ
-      - 九つ
-    expected: 9つ
-  - pattern: /([\d]+)つめ
-    expected: $1つ目
-  - pattern: /([\d]+)番め/
-    expected: $1番目
-  - pattern:
-      - ただ1つ
-      - 唯1つ
-      - 唯一つ
-    expected: ただ一つ
-  - pattern: もう1度
-    expected: もう一度
-  - pattern: もう1つ
-    expected: もう一つ
-  - pattern: 1つは
-    expected: 一つは
-  - pattern: 一目了然
-    expected: 一目瞭然
-  - pattern: いちがいに
-    expected: 一概に
-  - pattern: 一種類
-    expected: 1種類
-  - pattern: 1種
-    expected: 一種
-  - pattern: いっしょ
-    expected: 一緒
-  - pattern:
-      - ひととおり
-      - ひと通り
-      - 一とおり
-    expected: 一通り
-  - pattern: 1度
-    expected: 一度
-  - pattern: 1部
-    expected: 一部
-  - pattern: /1文(^字)/
-    expected: 一文
-  - pattern: 1例
-    expected: 一例
-  - pattern: 2重
-    expected: 二重
-  - pattern: 3重
-    expected: 三重
   - pattern: /([何数\\d一二三四五六七八九十０-９])箇所/
     expected: $1ヵ所
   - pattern: /([何数\\d一二三四五六七八九十０-９])個所/
@@ -264,28 +83,18 @@ rules:
       - イチから
       - 0から
     expected: ゼロから
-  - pattern: 曖昧
-    expected: あいまい
   - pattern: 敢えて
     expected: あえて
   - pattern: /煽([らりるれろっ])/
     expected: あお$1
   - pattern: 飽くまで
     expected: あくまで
-  - pattern: 憧れ
-    expected: あこがれ
   - pattern: 辺り
     expected: あたり
-  - pattern: 後々
-    expected: あとあと
   - pattern:
       - 貴方
       - 貴女
     expected: あなた
-  - pattern: 予め
-    expected: あらかじめ
-  - pattern: 改めて
-    expected: あらためて
   - pattern:
       - 有り難
       - 有難
@@ -300,10 +109,6 @@ rules:
     expected: ある
   - pattern: /一体([^に化感])/
     expected: いったい$1
-  - pattern: 一向に
-    expected: いっこうに
-  - pattern: 一旦
-    expected: いったん
   - pattern: 如何
     expected: いかが
   - pattern: 如何に
@@ -338,12 +143,6 @@ rules:
     expected: いと$1
   - pattern: おります
     expected: います
-  - pattern: 今や
-    expected: いまや
-  - pattern: 色々
-    expected: いろいろ
-  - pattern: 色んな
-    expected: いろんな
   - pattern: 所謂
     expected: いわゆる
   - pattern: ゆう
@@ -368,16 +167,10 @@ rules:
     expected: うなず
   - pattern: /上手([いく])|美味([いく])|ウマ([いく])/
     expected: うま$1
-  - pattern: 嬉し
-    expected: うれし
-  - pattern: 美味し
-    expected: おいし
   - pattern: 於いて
     expected: おいて
   - pattern: 大掛かり
     expected: おおがかり
-  - pattern: 概ね
-    expected: おおむね
   - pattern:
       - お陰
       - 御陰
@@ -392,8 +185,6 @@ rules:
     expected: おそらく
   - pattern: お疲れ様
     expected: お疲れさま
-  - pattern: 面白
-    expected: おもしろ
   - pattern: 却って
     expected: かえって
   - pattern: 片仮名
@@ -402,8 +193,6 @@ rules:
     expected: かつ
   - pattern: /叶([わいうえおっ])/
     expected: かな$1
-  - pattern: 仮名
-    expected: かな
   - pattern: /構([いうわっ])/
     expected: かま$1
   - pattern: /痒([いかくさみ])/
@@ -414,10 +203,6 @@ rules:
     expected: きれい
   - pattern: /括([らりるれろっ])/
     expected: くく$1
-  - pattern: 下さい
-    expected: ください
-  - pattern: /([^解])決して|([^解])けして/
-    expected: $1けっして
   - pattern: /拘([らりるれろっ])/
     expected: こだわ$1
   - pattern: 諺
@@ -456,10 +241,6 @@ rules:
     expected: しかた
   - pattern: /([^正率垂安素愚])直に/
     expected: $1じかに
-  - pattern: /仕組([^み])/
-    expected: しくみ$1
-  - pattern: 仕組み
-    expected: しくみ
   - pattern: しし
     expected: し
   - pattern: しだい
@@ -516,14 +297,6 @@ rules:
     expected: それ
   - pattern: /揃([わいうえおっ])/
     expected: そろ$1
-  - pattern: 大体
-    expected: だいたい
-  - pattern: 大抵
-    expected: たいてい
-  - pattern: 大変
-    expected: たいへん
-  - pattern: 沢山
-    expected: たくさん
   - pattern:
       - 高々
       - 高高
@@ -1816,8 +1589,6 @@ rules:
     pattern:  /コンポネント/
   - expected: コントローラ
     pattern:  /コントローラー/
-  - expected: サーバ
-    pattern:  /サーバー/
   - expected: サーブレット
     pattern:
       - Servlet
