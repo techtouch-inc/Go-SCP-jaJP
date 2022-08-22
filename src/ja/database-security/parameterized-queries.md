@@ -23,10 +23,6 @@ Go はほかの言語でのプリペアドステートメントとは異なる�
 customerName := r.URL.Query().Get("name")
 db.Exec("UPDATE creditcards SET name=? WHERE customerId=?", customerName, 233, 90)
 ```
-> 訳者注：
- https://gorm.io/ja_JP/docs/security.html
- https://pkg.go.dev/database/sql#Tx.Stmt
-
 
 プリペアドステートメントが、望ましくない場合もあります。いくつかの理由が考えられます。
 
