@@ -30,7 +30,6 @@ SELECT number, expireDate, cvv FROM creditcards WHERE customerId = 1 OR 1=1
 
 データベースを安全に保つ方法はたった 1 つ、[プリペアドステートメント][1]です。
 
-
 ```go
 ctx := context.Background()
 customerId := r.URL.Query().Get("id")
