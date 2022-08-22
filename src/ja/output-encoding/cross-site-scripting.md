@@ -48,7 +48,7 @@ HTTP レスポンスヘッダ `Content-Type` が明示的に指定されてい�
 
 ここで、`param1` を `<script>alert(1)</script>` としてみましょう。
 
-[WhatWG spec][5] で定義された通り、`Content-Type` HTTP レスポンスヘッダは、`text/html` として送信され、`param1` の値がそのままレンダリングされてしまい、XSS(クロスサイトスクリプティング）が成功します。
+[WhatWG spec][5] で定義された通り、`Content-Type` HTTP レスポンスヘッダは、`text/html` として送信され、`param1` の値がそのままレンダリングされてしまい、XSS (クロスサイトスクリプティング）が成功します。
 
 ![XSS - Cross-Site Scripting][cross-site-scripting]
 

@@ -52,7 +52,7 @@ func main() {
 
 ---
 
-[Go's log package][0]は、ドキュメントによると**シンプル**なロギングを実装しているとのことです。レベルごとのロギング (例： `debug`、`info`、`warn`、`error`、`fatal`、`panic`) や、フォーマッタのサポート (例： logstash) といった一般的で重要な機能が欠けています。
+[Go's log package][0] は、ドキュメントによると**シンプル**なロギングを実装しているとのことです。レベルごとのロギング (例： `debug`、`info`、`warn`、`error`、`fatal`、`panic`) や、フォーマッタのサポート (例： logstash) といった一般的で重要な機能が欠けています。
 これら 2 つの機能はログを利用しやすくするための重要な要素です。
 (例： Security Information や Event Management system との統合）。
 
@@ -63,7 +63,7 @@ func main() {
 * [glog][2] - https://github.com/golang/glog
 * [loggo][3] - https://github.com/juju/loggo
 
-ここで、[Go's log package][0]に関する重要な注意事項があります。Fatal と Panic 関数はロギング後に異なる動作をします。Panic 関数は `panic` を呼び出しますが、Fatal 関数は `os.Exit(1)` を呼び出します。後者は defer ステートメントを無視してプログラムを終了させるので、バッファの Flash、および一時データの削除ができないかもしれません。
+ここで、[Go's log package][0] に関する重要な注意事項があります。Fatal と Panic 関数はロギング後に異なる動作をします。Panic 関数は `panic` を呼び出しますが、Fatal 関数は `os.Exit(1)` を呼び出します。後者は defer ステートメントを無視してプログラムを終了させるので、バッファの Flash、および一時データの削除ができないかもしれません。
 
 
 ---

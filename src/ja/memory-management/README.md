@@ -64,7 +64,7 @@ Go では、`Unsafe` パッケージにこれらの関数が含まれていま�
 一方、メモリの解放はガベージコレクタによって処理されるため、心配する必要はありません。
 手動でメモリ割り当てを解放できますが推奨しません。
 
-[Go言語のGitHub](https://github.com/golang/go/issues/13761)を引用します。
+[Go 言語の GitHub](https://github.com/golang/go/issues/13761)を引用します。
 
 > もし本当にGoでメモリを手動で管理したいのであれば、自力で
 > syscall.Mmap や cgo malloc/free をベースにした独自のメモリアロケータを実装してください。

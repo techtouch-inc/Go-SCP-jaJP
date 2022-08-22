@@ -18,7 +18,7 @@ HTTP WebSocket ハンドシェイクの `Origin` ヘッダは、WebSocket が受
 WebSocket サーバーは任意のオリジンからの接続を受け入れる可能性があります。
 
 以下の例では、`Origin` ヘッダをチェックし、
-攻撃者が CSWSH (Cross-Site WebSocket Hijacking)を実行するのを防ぎます。
+攻撃者が CSWSH (Cross-Site WebSocket Hijacking) を実行するのを防ぎます。
 
 ![HTTP ヘッダリーク](img/w1_1.png)
 
