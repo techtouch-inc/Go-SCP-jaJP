@@ -1,68 +1,53 @@
-翻訳作業がおわったらリポジトリを整える。
+本リポジトリは [Go Secure Coding Practice][13] の日本語訳です。
 
+本書は次の形式でダウンロードできます。 [PDF][12]
 
-You can download this book in the following formats: [PDF][12], [Mobi][13] and
-[ePub][14].
+# 始めに
 
-# Introduction
+Go Language - Web Application Secure Coding Practices は、[Go 言語][1]を使用して Web 開発しようとする人のために書かれたガイドです。
 
-Go Language - Web Application Secure Coding Practices is a guide written for
-anyone who is using the [Go Programming Language][1] and aims to use it for web
-development.
+本書は、[Checkmarx Security Research Team][2] との共著であり、[OWASP Secure Coding Practices - Quick Reference Guide v2 (stable)][3] リリースに準拠しています。
 
-This book is collaborative effort of [Checkmarx Security Research Team][2] and
-it follows the
-[OWASP Secure Coding Practices - Quick Reference Guide v2 (stable)][3] release.
+本書の主な目的は、「実践的なアプローチ」を通じてよくある間違いを避けられるようになることと同時に、新しいプログラミング言語を学習できるようにすることです。本書は、開発中にどのようなセキュリティ上の問題が発生しうるかを示しながら、「どのように安全に行うか」について、十分なレベルの詳細を提供しています。
 
-The main goal of this book is to help developers avoid common mistakes while at
-the same time, learning a new programming language through a
-"hands-on approach".
-This book provides a good level of detail on "how to do it securely" showing
-what kind of security problems could arise during development.
+## 本書の意義
 
-## The Audience for this Book
+Stack Overflow が毎年行っている開発者調査によると、Go は 2 年連続で最も愛されているプログラミング言語のトップ 5 に入っています。その人気の急上昇からも、Go で開発されるアプリケーションはセキュリティを考慮して設計されることが非常に重要となっています。
 
-The primary audience of the Go Secure Coding Practices Guide is developers,
-particularly the ones with previous experience with other programming languages.
+Checkmarx Research Team は、開発者、セキュリティチーム、そして業界全体に対して、一般的なコーディングエラーについての教育を支援し、ソフトウェア開発プロセスで発生しがちな脆弱性についての認識を高めることに貢献しています。
 
-The book is also a great reference to those learning programming for the first
-time, who have already finish the [Go tour][8].
+## この本のターゲット読者
 
-## What You Will Learn
+Go Secure Coding Practices Guide の主なターゲット読者は、開発者です。
+特に、ほかのプログラミング言語での経験をすでにお持ちの方にお勧めです。
 
-This book covers the [OWASP Secure Coding Practices Guide][3] topic-by-topic,
-providing examples and recommendations using Go, to help developers avoid common
-mistakes and pitfalls.
+また、初めてプログラミングを学ぶ人で [Go tour][8] を修了している方にも、本書は非常に参考になります。
 
-After reading this book, you'll be more confident you're developing secure Go
-applications.
+## 何を学べるのか
 
-## About OWASP Secure Coding Practices
+本書は、[OWASP Secure Coding Practices Guide][3] をトピックごとに解説しています。
+Go 言語を使用した例と推奨事項を通して学習することで、一般的な間違いや落とし穴を避けられます。
 
-This book was adapted for Go Language from The [Secure Coding Practices Quick
-Reference Guide][3], an [OWASP][4] - Open Web Application Security Project. It
-is a "_technology agnostic set of general software security coding practices, in
-a comprehensive checklist format, that can be integrated into the development
-lifecycle_" ([source][3]).
+本書を読めば、安全な Go アプリケーションの開発に自信が持ていることでしょう。
 
-[OWASP][4] itself is "_an open community dedicated to enabling organizations to
-conceive, develop, acquire, operate, and maintain applications that can be
-trusted. All of the OWASP tools, documents, forums, and chapters are free and
-open to anyone interested in improving application security_" ([source][5]).
+## OWASP セキュア・コーディング・プラクティスについて
 
-## How to Contribute
+ [Secure Coding Practices Quick Reference Guide][3] は、オープン Web アプリケーションプロジェクト（[OWASP][4]）の 1 つです。このプロジェクトは、『技術スタックにとらわれない一般的なソフトウェアセキュリティコーディングプラクティスを、開発ライフサイクルに組み込めるように包括的なチェックリストという形で提供しています。』と宣言されています（[出典][3]）。
 
-This book was created using a few open source tools.
-If you're curious about how we built it from scratch, read the
-[How To contribute section][6].
+[OWASP][4] 自体は、『あらゆる組織が信頼できるアプリケーションの構想、開発、導入、運用、保守できることを目的としたオープンなコミュニティです。
+すべての OWASP のツール、ドキュメント、フォーラム、チャプターはすべて無償で提供され、アプリケーションセキュリティの向上に興味のある者が誰でも利用可能です。』（[出典][5]）と宣言されています。
 
-## License
+## 貢献するには
 
-This document is released under the Creative Commons Attribution-ShareAlike 4.0
-International license (CC BY-SA 4.0). For any reuse or distribution, you must
-make clear to others the license terms of this work.
+本書は、いくつかのオープンソースツールを使用して作成されています。
+どのようにゼロから作ったか興味がある方は、
+[貢献するには][6]をご覧ください。
+
+## ライセンス
+
+本書はクリエイティブコモンズライセンス 表示 - 継承 4.0 国際ライセンス (CC BY-SA 4.0) に基づいています。
+再利用や配布の際には、ライセンスを明示しなければいけません。
 [https://creativecommons.org/licenses/by-sa/4.0/][11]
-
 
 
 [1]: https://golang.org
@@ -77,5 +62,4 @@ make clear to others the license terms of this work.
 [10]: https://www.gitbook.com/book/checkmarx/go-scp/
 [11]: https://creativecommons.org/licenses/by-sa/4.0/
 [12]: dist/go-webapp-scp.pdf
-[13]: dist/go-webapp-scp.mobi
-[14]: dist/go-webapp-scp.epub
+[13]: https://github.com/OWASP/Go-SCP/
