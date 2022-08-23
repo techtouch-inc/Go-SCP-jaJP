@@ -1,4 +1,4 @@
-# 始めに
+# はじめに
 
 Go Language - Web Application Secure Coding Practices は、[Go 言語][1]を使用して Web 開発しようとする人のために書かれたガイドです。
 

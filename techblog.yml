@@ -831,8 +831,6 @@ rules:
     expected: 始めた
   - pattern: はじま
     expected: 始ま
-  - pattern: はじめ
-    expected: 始め
   - pattern: かたまり
     expected: 塊
   - pattern: やりかた
@@ -1960,8 +1958,6 @@ rules:
     pattern:  /プロデューサ([^ー])/
   - expected: プランナー$1
     pattern:  /プランナ([^ー])/
-  - expected: $1マスタ$2
-    pattern:  /(?:([^ム])マスター)|(?:マスター([^.]))/
   - expected: $1マスタ$2
     pattern:  /(?:([^ム])\bMaster)|(?:Master\b([^.]))/
   - expected: マネージャー$1
