@@ -1,6 +1,7 @@
-本リポジトリは [Go Secure Coding Practice][13] の日本語訳です。
+This is a Japanese translation of the repo [Go Secure Coding Practice][13] published by [OWASP][4]. 
 
-本書は次の形式でダウンロードできます。 [PDF][12]
+The content can be downloaded in the following formats. [PDF][12]
+
 
 # はじめに
 
