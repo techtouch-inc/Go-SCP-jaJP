@@ -29,7 +29,7 @@ WebSocket サーバーは任意のオリジンからの接続を受け入れる�
 ```go
 //Compare our origin with Host and act accordingly
 if r.Header.Get("Origin") != "http://"+r.Host {
-  http.Error(w, "Origin not allowed", 403)
+    http.Error(w, "Origin not allowed", 403)
     return
 } else {
     websocket.Handler(EchoHandler).ServeHTTP(w, r)
@@ -55,9 +55,9 @@ WebSocket を調べる場合、元の接続を調べて TLS を使用してい�
 
 ![HTTP Cookie TLS](img/ws_tls_upgrade.png)
 
-後者の例では、接続のアップグレード要求が SSL を使用し、さらに Websocket も SSL を使用します。
+後者の例では、接続のアップグレード要求が SSL を使用し、さらに WebSocket も SSL を使用します。
 
-![Websocket SSL](img/wss_secure.png)
+![WebSocket SSL](img/wss_secure.png)
 
 ## 認証と認可
 
