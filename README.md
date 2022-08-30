@@ -56,7 +56,7 @@ Go 言語を使用した例と推奨事項を通して学習することで、�
 [3]: https://owasp.org/www-project-secure-coding-practices-quick-reference-guide/migrated_content
 [4]: https://www.owasp.org
 [5]: https://www.owasp.org/index.php/About_OWASP
-[6]: src/howto-contribute.md
+[6]: src/ja/howto-contribute.md
 [7]: https://www.twitter.com/checkmarx
 [8]: https://www.gitbook.com/
 [9]: https://checkmarx.gitbooks.io/go-scp/
