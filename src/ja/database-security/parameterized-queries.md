@@ -29,7 +29,7 @@ db.Exec("UPDATE creditcards SET name=? WHERE customerId=?", customerName, 233, 9
 * データベースがプリペアドステートメントをサポートしていない場合。
 MySQL ドライバを利用している場合、wire protocol をサポートしている　MemSQL や Sphinx は MySQL に接続できます。しかし、それらはプリペアドステートメントを含む "バイナリ "プロトコルをサポートしていないため、紛らわしい形で失敗する可能性があります。
 
-* ステートメントが十分に再利用されないため、セキュリティの問題はアプリケーションスタックの別のレイヤで処理される場合 (参照： [Input Validation][1] and [Output Encoding][2])。上記のようなパフォーマンスは望めません。
+* ステートメントが十分に再利用されないと、セキュリティの問題はアプリケーションスタックの別のレイヤで処理 (参照： [Input Validation][1] and [Output Encoding][2]) されるため、上で見たようなパフォーマンスは望めません。
 
 [1]: ../input-validation/README.md
 [2]: ../output-encoding/README.md
