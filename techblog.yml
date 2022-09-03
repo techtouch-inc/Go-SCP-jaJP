@@ -345,13 +345,6 @@ rules:
     expected: づら$1
   - pattern: んで([たなるろよ])
     expected: んでい$1
-  - pattern: /てな(?!く)/
-    expected: ていな
-    specs:
-      - from: わかってない
-        to:   わかっていない
-      - from: 消えてなくなる
-        to:   消えてなくなる
   - pattern: /([^捨当立])てる/
     expected: $1ている
   - pattern: /出来([かがのをは過す損ずなまるたれてそ])/
@@ -1314,8 +1307,6 @@ rules:
     expected: 洗練
   - pattern: 基板
     expected: 基盤
-  - pattern: ふれ
-    expected: 触れ
   - pattern: /あお([がぎぐげごっ])/
     expected: 仰$1
   - pattern:
