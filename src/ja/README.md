@@ -28,7 +28,7 @@ Go 言語を使用した例と推奨事項を通して学習することで、�
 
 ## OWASP セキュア・コーディング・プラクティスについて
 
- [Secure Coding Practices Quick Reference Guide][3] は、オープン Web アプリケーションプロジェクト（[OWASP][4]）の 1 つです。このプロジェクトは、『技術スタックにとらわれない一般的なソフトウェアセキュリティコーディングプラクティスを、開発ライフサイクルに組み込めるように包括的なチェックリストという形で提供しています。』と宣言されています（[出典][3]）。
+ [Secure Coding Practices Quick Reference Guide][3] は、オープン Web アプリケーションプロジェクト（[OWASP][4]）の 1 つです。このプロジェクトは、『技術スタックにとらわれない一般的なソフトウェアセキュリティコーディングプラクティスを、開発ライフサイクルに組み込めるように包括的なチェックリストという形で提供しています。』と宣言されています（[出典][9]）。
 
 [OWASP][4] 自体は、『あらゆる組織が信頼できるアプリケーションの構想、開発、導入、運用、保守できることを目的としたオープンなコミュニティです。
 すべての OWASP のツール、ドキュメント、フォーラム、チャプターはすべて無償で提供され、アプリケーションセキュリティの向上に興味のある者が誰でも利用可能です。』（[出典][5]）と宣言されています。
@@ -41,9 +41,10 @@ Go 言語を使用した例と推奨事項を通して学習することで、�
 
 [1]: https://golang.org
 [2]: http://chkmrx.co/2sffXFr
-[3]: https://owasp.org/www-project-secure-coding-practices-quick-reference-guide/migrated_content
-[4]: https://www.owasp.org
-[5]: https://www.owasp.org/index.php/About_OWASP
+[3]: https://owasp.org/www-project-secure-coding-practices-quick-reference-guide/
+[4]: https://owasp.org/
+[5]: https://owasp.org/about/
 [6]: /howto-contribute.md
 [7]: https://www.twitter.com/checkmarx
 [8]: https://tour.golang.org/list
+[9]: https://owasp.org/www-project-secure-coding-practices-quick-reference-guide/#div-download
