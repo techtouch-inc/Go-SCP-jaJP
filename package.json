@@ -4,7 +4,6 @@
   "description": "Go Web Applications Secure Coding Practices",
   "main": "index.js",
   "dependencies": {
-    "gitbook-cli": "^2.3.2",
     "textlint": "^12.2.1",
     "textlint-filter-rule-whitelist": "^2.0.0",
     "textlint-rule-ja-no-abusage": "^2.0.1",
@@ -28,10 +27,10 @@
     "textlint-rule-sentence-length": "^2.2.0"
   },
   "scripts": {
-    "serve": "gitbook serve",
-    "build:pdf": "gitbook pdf ./ ./dist/go-webapp-scp.pdf",
-    "build:epub": "gitbook epub ./ ./dist/go-webapp-scp.epub",
-    "build:mobi": "gitbook mobi ./ ./dist/go-webapp-scp.mobi",
+    "serve": "honkit serve",
+    "build:pdf": "honkit pdf ./ ./dist/go-webapp-scp.pdf",
+    "build:epub": "honkit epub ./ ./dist/go-webapp-scp.epub",
+    "build:mobi": "honkit mobi ./ ./dist/go-webapp-scp.mobi",
     "build:docx": "ebook-convert ./dist/go-webapp-scp.epub ./dist/go-webapp-scp.docx",
     "build": "npm run build:pdf; npm run build:epub; npm run build:mobi && npm run build:docx"
   },
@@ -42,5 +41,8 @@
     "Checkmarx"
   ],
   "author": "Checkmarx Security Research Team",
-  "license": "GPL-3.0"
+  "license": "GPL-3.0",
+  "devDependencies": {
+    "honkit": "^4.0.7"
+  }
 }
