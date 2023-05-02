@@ -3,10 +3,6 @@
     "language": "ja_JP",
     "root": "./src/ja",
     "pdf": {
-        "paperSize": "a4",
-        "margin": {
-            "left": 2,
-            "right": 2
-        }
+        "paperSize": "a4"
     }
 }
